@@ -321,10 +321,12 @@
     .chat-msg { max-width: 75%; padding: 10px 16px; border-radius: 18px; font-size: 14px; line-height: 1.6; word-wrap: break-word; white-space: pre-wrap; }
     .chat-msg.user { background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color: #fff; border-bottom-right-radius: 4px; box-shadow: 0 4px 14px rgba(212, 134, 92, 0.25); }
     .chat-msg.akira { background: rgba(255, 255, 255, 0.9); color: var(--color-text); border: 1px solid var(--color-border); border-bottom-left-radius: 4px; backdrop-filter: blur(6px); }
-    .chat-msg.typing { display: flex; align-items: center; gap: 5px; padding: 15px 18px; }
-    .chat-msg.typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--color-primary); opacity: 0.3; animation: blinkDot 1.2s infinite; }
-    .chat-msg.typing span:nth-child(2) { animation-delay: 0.2s; }
-    .chat-msg.typing span:nth-child(3) { animation-delay: 0.4s; }
+    .chat-msg.typing { display: flex; align-items: center; gap: 7px; padding: 15px 18px; }
+    .chat-msg.typing .typing-text { font-size: 13px; color: var(--color-text-light); font-style: italic; white-space: nowrap; }
+    .chat-msg.typing .typing-dots { display: flex; align-items: center; gap: 5px; }
+    .chat-msg.typing .typing-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--color-primary); opacity: 0.3; animation: blinkDot 1.2s infinite; }
+    .chat-msg.typing .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .chat-msg.typing .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
     @keyframes blinkDot { 0%, 80%, 100% { opacity: 0.25; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
     .chat-input-area { display: flex; padding: 12px 16px 14px; border-top: 1px solid var(--color-border); gap: 10px; background: rgba(255, 255, 255, 0.4); flex-shrink: 0; border-radius: 0 0 32px 32px; backdrop-filter: blur(6px); }
     .chat-input-area input { flex: 1; min-width: 0; border: 1px solid transparent; border-radius: 40px; padding: 10px 18px; font-family: var(--font-family); font-size: 14px; outline: none; background: rgba(255, 255, 255, 0.85); transition: var(--transition); }
@@ -972,6 +974,7 @@
             login_success: 'Welcome back, ',
             logout: 'Signed out.',
             sns_connect: 'Connecting to {sns}...',
+            typing_hint: 'Akira is thinking... hehe, hang tight~',
             survey_link: 'Answer detailed survey',
             survey_title: 'Detailed Questionnaire',
             survey_sub: 'Thank you for your cooperation. Your lottery chances increase.',
@@ -1135,6 +1138,7 @@
             login_success: '欢迎回来，',
             logout: '已登出。',
             sns_connect: '正在连接 {sns}...',
+            typing_hint: 'Akira正在思考呢…笑笑请稍等',
             survey_link: '回答详细问卷',
             survey_title: '详细问卷',
             survey_sub: '感谢您的合作。您的抽奖机会将增加。',
@@ -1298,6 +1302,7 @@
             login_success: 'おかえりなさい、',
             logout: 'ログアウトしました。',
             sns_connect: '{sns} に接続中...',
+            typing_hint: 'Akiraが考え中です…えへへ、少々お待ちを',
             survey_link: '詳細アンケートに回答する',
             survey_title: '詳細アンケート',
             survey_sub: 'ご協力ありがとうございます。抽選権がアップします。',
@@ -1735,7 +1740,7 @@
         const wrap = document.createElement('div');
         wrap.className = 'msg-wrapper akira';
         wrap.id = 'typingIndicator';
-        wrap.innerHTML = '<div class="chat-avatar">🍁</div><div class="chat-msg akira typing"><span></span><span></span><span></span></div>';
+        wrap.innerHTML = '<div class="chat-avatar">🍁</div><div class="chat-msg akira typing"><span class="typing-text">' + t('typing_hint') + '</span><div class="typing-dots"><span></span><span></span><span></span></div></div>';
         chatMessages.appendChild(wrap);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
