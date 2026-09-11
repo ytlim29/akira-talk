@@ -1,0 +1,1973 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AkiraTalk – 你最好的伙伴</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+    :root {
+        --color-primary: #D4865C;
+        --color-primary-dark: #BF7047;
+        --color-primary-light: #F0D6C4;
+        --color-secondary: #4A2C1A;
+        --color-text: #3D2A1E;
+        --color-text-light: #6B5344;
+        --color-bg-start: #FBF5F0;
+        --color-bg-end: #F0E6DD;
+        --color-glass: rgba(255, 248, 242, 0.65);
+        --color-border: rgba(180, 150, 130, 0.25);
+        --shadow-card: 0 8px 30px rgba(74, 44, 26, 0.06);
+        --shadow-btn: 0 8px 24px rgba(212, 134, 92, 0.30);
+        --radius-card: 28px;
+        --radius-pill: 60px;
+        --transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        --font-family: 'Quicksand', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+        font-family: var(--font-family);
+        background:
+            radial-gradient(900px 500px at 12% -8%, rgba(212, 134, 92, 0.10), transparent 60%),
+            radial-gradient(800px 500px at 92% 4%, rgba(240, 214, 196, 0.45), transparent 62%),
+            linear-gradient(145deg, var(--color-bg-start) 0%, var(--color-bg-end) 100%);
+        background-attachment: fixed;
+        min-height: 100vh;
+        padding: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        -webkit-font-smoothing: antialiased;
+    }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(212, 134, 92, 0.28); border-radius: 10px; border: 3px solid transparent; background-clip: content-box; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(212, 134, 92, 0.5); background-clip: content-box; }
+
+    .app {
+        max-width: 1200px;
+        width: 100%;
+        background: var(--color-glass);
+        backdrop-filter: blur(18px) saturate(140%);
+        -webkit-backdrop-filter: blur(18px) saturate(140%);
+        border-radius: 48px;
+        padding: 28px 36px 20px;
+        box-shadow: 0 24px 70px rgba(74, 44, 26, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.55);
+        transition: var(--transition);
+    }
+
+    /* ============ 导航（两行布局） ============ */
+    .nav {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px 18px;
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--color-border);
+        z-index: 100;
+    }
+
+    .sns-header {
+        flex-basis: 100%;
+        display: flex;
+        justify-content: flex-end;
+        gap: 2px;
+        z-index: 200;
+    }
+    .sns-header .sns-btn {
+        background: transparent;
+        border: none;
+        border-radius: 40px;
+        width: 34px;
+        height: 34px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        color: var(--color-text-light);
+        cursor: pointer;
+        transition: var(--transition);
+        border: 1px solid transparent;
+        text-decoration: none;
+    }
+    .sns-header .sns-btn:hover {
+        background: rgba(212, 134, 92, 0.12);
+        color: var(--color-primary-dark);
+        border-color: var(--color-border);
+        transform: translateY(-2px);
+    }
+
+    .brand { display: flex; flex-direction: column; line-height: 1.1; flex-shrink: 0; }
+    .brand .main { display: flex; align-items: center; gap: 10px; font-size: 28px; font-weight: 700; color: var(--color-secondary); letter-spacing: -0.5px; }
+    .brand .main svg { color: var(--color-primary); }
+    .brand .sub { font-size: 13px; font-weight: 400; color: var(--color-text-light); letter-spacing: 0.5px; margin-left: 42px; margin-top: -2px; font-style: italic; white-space: nowrap; }
+
+    .nav-links { 
+        display: flex; 
+        gap: 4px; 
+        flex-wrap: wrap; 
+        flex: 1 1 auto; 
+        min-width: 0;
+        justify-content: flex-start; 
+        align-items: center; 
+        position: relative; 
+        z-index: 80; 
+    }
+    .nav-links button, .nav-links .dropdown > span {
+        background: transparent; border: none; padding: 8px 16px; border-radius: 40px; font-size: 14px; font-weight: 500; color: var(--color-text); cursor: pointer; transition: var(--transition); font-family: var(--font-family); white-space: nowrap; position: relative; display: flex; align-items: center; gap: 6px; user-select: none;
+    }
+    .nav-links button:hover, .nav-links .dropdown > span:hover { background: rgba(212, 134, 92, 0.10); }
+    .nav-links button.active { background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color: #fff; box-shadow: 0 6px 18px rgba(212, 134, 92, 0.30); }
+    .nav-links button.active i { color: #fff; }
+
+    html[lang="en"] .nav-links button,
+    html[lang="en"] .nav-links .dropdown > span {
+        padding: 7px 12px;
+        font-size: 13px;
+    }
+
+    .dropdown { position: relative; z-index: 90; padding-bottom: 12px; margin-bottom: -12px; }
+    .dropdown-content { display: none; position: absolute; top: 100%; left: 0; margin-top: 6px; background: rgba(255, 250, 245, 0.98); backdrop-filter: blur(12px); border-radius: 20px; padding: 8px; min-width: 180px; box-shadow: 0 18px 40px rgba(74, 44, 26, 0.12); border: 1px solid var(--color-border); z-index: 100; }
+    .dropdown-content a { display: flex; align-items: center; gap: 8px; padding: 10px 16px; color: var(--color-text); text-decoration: none; font-size: 14px; font-weight: 500; border-radius: 14px; transition: 0.18s; }
+    .dropdown-content a:hover { background: rgba(212, 134, 92, 0.12); color: var(--color-primary-dark); }
+    @media (min-width: 901px) { .nav-links .dropdown:hover .dropdown-content { display: block; } }
+    .nav-links .dropdown.active .dropdown-content { display: block; }
+
+    .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+        flex-wrap: nowrap;
+        justify-content: flex-end;
+        position: relative;
+        z-index: 60;
+        margin-left: auto;
+    }
+
+    .lang-switch { display: flex; gap: 4px; border: 1px solid var(--color-border); border-radius: 40px; padding: 4px; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(8px); white-space: nowrap; box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 2px 8px rgba(74, 44, 26, 0.04); position: relative; z-index: 70; flex-shrink: 0; margin: 0 4px; }
+    .lang-btn { background: transparent; border: none; border-radius: 30px; padding: 6px 14px; font-size: 12px; font-weight: 600; color: var(--color-text); cursor: pointer; transition: var(--transition); font-family: var(--font-family); line-height: 1.2; min-width: 48px; text-align: center; }
+    .lang-btn:hover { background: rgba(255, 255, 255, 0.9); }
+    .lang-btn.active { background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color: #fff; box-shadow: 0 3px 10px rgba(212, 134, 92, 0.35); }
+
+    .user-area { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .user-area .signin-btn { background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); border: none; border-radius: var(--radius-pill); padding: 9px 22px; color: #fff; font-weight: 600; font-size: 14px; cursor: pointer; transition: var(--transition); font-family: var(--font-family); box-shadow: var(--shadow-btn); display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+    .user-area .signin-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(212, 134, 92, 0.40); }
+    .user-area .logout-btn { background: transparent; border: 1px solid var(--color-border); border-radius: var(--radius-pill); padding: 6px 16px; font-size: 13px; color: var(--color-text); cursor: pointer; transition: var(--transition); font-family: var(--font-family); display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+    .user-area .logout-btn:hover { background: rgba(212, 134, 92, 0.10); border-color: var(--color-primary); color: var(--color-primary-dark); }
+    .profile-badge { display: inline-flex; align-items: center; gap: 7px; background: rgba(212, 134, 92, 0.12); padding: 6px 15px 6px 12px; border-radius: 40px; font-size: 13px; font-weight: 600; color: var(--color-secondary); border: 1px solid var(--color-border); max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .profile-badge i { color: var(--color-primary); font-size: 15px; }
+
+    /* ============ 页面容器 & 内容 ============ */
+    .content { flex: 1; }
+    .page { display: none; }
+    .page.active { display: block; animation: fadeIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+    @keyframes fadeIn { 0% { opacity: 0; transform: translateY(16px); } 100% { opacity: 1; transform: translateY(0); } }
+
+    .hero { text-align: center; padding: 48px 10px 32px; position: relative; }
+    .hero .maple-bg { position: absolute; top: -30px; right: -10px; font-size: 160px; color: rgba(212, 134, 92, 0.06); z-index: 0; transform: rotate(20deg); pointer-events: none; }
+    .hero h1 { font-size: 52px; font-weight: 700; color: var(--color-secondary); line-height: 1.2; position: relative; z-index: 1; }
+    .hero h1 .highlight { color: var(--color-primary); position: relative; }
+    .hero h1 .highlight::after { content: ''; position: absolute; bottom: 2px; left: 0; width: 100%; height: 6px; background: rgba(212, 134, 92, 0.15); border-radius: 10px; }
+    .hero .subtitle { font-size: 20px; color: var(--color-text-light); max-width: 560px; margin: 16px auto 32px; line-height: 1.7; font-weight: 300; position: relative; z-index: 1; }
+    .hero .cta-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; position: relative; z-index: 1; }
+
+    .cta-primary { background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color: #fff; border: none; padding: 14px 40px; border-radius: var(--radius-pill); font-weight: 600; font-size: 16px; cursor: pointer; transition: var(--transition); font-family: var(--font-family); box-shadow: var(--shadow-btn); display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+    .cta-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(212, 134, 92, 0.42); }
+    .cta-secondary { background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(6px); color: var(--color-secondary); border: 1px solid var(--color-border); padding: 14px 32px; border-radius: var(--radius-pill); font-weight: 600; font-size: 16px; cursor: pointer; transition: var(--transition); font-family: var(--font-family); display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+    .cta-secondary:hover { background: #fff; transform: translateY(-3px); border-color: var(--color-primary); }
+
+    .stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px 80px; padding: 32px 10px 16px; border-top: 1px solid var(--color-border); margin-top: 12px; }
+    .stats .stat-item { text-align: center; }
+    .stats .stat-item .number { font-size: 36px; font-weight: 700; color: var(--color-primary); display: block; }
+    .stats .stat-item .label { font-size: 14px; color: var(--color-text-light); font-weight: 500; margin-top: 4px; letter-spacing: 0.5px; }
+
+    .about-preview { padding: 40px 10px 20px; max-width: 800px; margin: 0 auto; text-align: center; }
+    .about-preview h2 { font-size: 28px; color: var(--color-secondary); margin-bottom: 16px; }
+    .about-preview h2 i { color: var(--color-primary); margin-right: 10px; }
+    .about-preview p { font-size: 17px; line-height: 1.8; color: var(--color-text); }
+    .about-preview .quote-block { background: rgba(212, 134, 92, 0.07); border-radius: 24px; padding: 24px 32px; border-left: 6px solid var(--color-primary); margin: 24px 0 8px; font-style: italic; font-size: 19px; color: var(--color-secondary); }
+    .about-preview .quote-block .attr { font-style: normal; font-weight: 500; color: var(--color-text-light); margin-top: 8px; font-size: 15px; }
+
+    .home-image-container { position: relative; max-width: 900px; margin: 20px auto 40px; border-radius: 32px; overflow: hidden; box-shadow: var(--shadow-card); border: 1px solid var(--color-border); background: #2a1a10; }
+    .home-image-container::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(74, 44, 26, 0.1), rgba(74, 44, 26, 0.6)); z-index: 1; }
+    .home-image-container img { width: 100%; height: auto; display: block; opacity: 0.85; transition: var(--transition); }
+    .home-image-container:hover img { opacity: 1; transform: scale(1.03); }
+    .home-overlay-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2; color: #fff; font-size: 38px; font-weight: 700; text-shadow: 0 4px 24px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6); white-space: nowrap; letter-spacing: 3px; pointer-events: none; }
+
+    .features-section { padding: 40px 10px 20px; }
+    .features-section h2 { text-align: center; font-size: 28px; color: var(--color-secondary); margin-bottom: 32px; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 24px; }
+    .feature-card { background: rgba(255, 248, 242, 0.55); backdrop-filter: blur(6px); border-radius: var(--radius-card); padding: 32px 24px; text-align: center; border: 1px solid var(--color-border); transition: var(--transition); }
+    .feature-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-card); background: rgba(255, 255, 255, 0.8); border-color: var(--color-primary-light); }
+    .feature-card i { font-size: 40px; color: var(--color-primary); margin-bottom: 16px; display: inline-block; }
+    .feature-card h4 { font-size: 18px; color: var(--color-secondary); font-weight: 600; margin-bottom: 8px; }
+    .feature-card p { font-size: 14px; color: var(--color-text-light); line-height: 1.6; }
+
+    .testimonials { padding: 40px 10px 20px; }
+    .testimonials h2 { text-align: center; font-size: 28px; color: var(--color-secondary); margin-bottom: 32px; }
+    .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
+    .testimonial-card { background: rgba(255, 248, 242, 0.45); backdrop-filter: blur(6px); border-radius: var(--radius-card); padding: 24px 22px; border: 1px solid var(--color-border); text-align: center; transition: var(--transition); }
+    .testimonial-card:hover { background: rgba(255, 255, 255, 0.7); transform: translateY(-4px); box-shadow: var(--shadow-card); }
+    .testimonial-card .stars { color: var(--color-primary); font-size: 16px; letter-spacing: 3px; margin-bottom: 12px; }
+    .testimonial-card blockquote { font-size: 15px; color: var(--color-text); line-height: 1.7; font-style: italic; }
+    .testimonial-card .author { font-size: 13px; color: var(--color-text-light); font-weight: 500; margin-top: 12px; }
+
+    .cta-bottom { text-align: center; padding: 36px 24px; background: rgba(212, 134, 92, 0.05); border-radius: var(--radius-card); margin-top: 24px; border: 1px solid var(--color-border); }
+    .cta-bottom h3 { font-size: 26px; color: var(--color-secondary); margin-bottom: 8px; }
+    .cta-bottom p { font-size: 16px; color: var(--color-text-light); margin-bottom: 20px; }
+
+    .about-content { padding: 30px 10px 20px; max-width: 900px; margin: 0 auto; }
+    .about-content h2 { font-size: 30px; color: var(--color-secondary); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+    .about-content h2 i { color: var(--color-primary); }
+    .about-intro-section { display: flex; flex-wrap: wrap; gap: 30px; align-items: center; margin-bottom: 40px; }
+    .about-intro-image { flex: 1 1 300px; border-radius: 24px; overflow: hidden; box-shadow: var(--shadow-card); border: 1px solid var(--color-border); transition: var(--transition); }
+    .about-intro-image:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(74, 44, 26, 0.12); }
+    .about-intro-image img { width: 100%; height: auto; display: block; transition: var(--transition); }
+    .about-intro-image:hover img { transform: scale(1.05); }
+    .about-intro-section .intro { flex: 1 1 400px; font-size: 16px; line-height: 1.8; color: var(--color-text); text-align: left; margin-bottom: 0; }
+
+    .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin: 24px 0 32px; }
+    .about-card { background: rgba(255, 248, 242, 0.55); backdrop-filter: blur(6px); border-radius: var(--radius-card); padding: 28px 20px; text-align: center; border: 1px solid var(--color-border); transition: var(--transition); }
+    .about-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-card); background: rgba(255, 255, 255, 0.8); border-color: var(--color-primary-light); }
+    .about-card i { font-size: 36px; color: var(--color-primary); margin-bottom: 12px; display: inline-block; }
+    .about-card h4 { font-size: 20px; color: var(--color-secondary); font-weight: 600; margin-bottom: 6px; }
+    .about-card p { font-size: 14px; color: var(--color-text-light); line-height: 1.6; margin: 0; }
+    .about-quote { background: rgba(212, 134, 92, 0.07); border-radius: 24px; padding: 28px 32px; border-left: 6px solid var(--color-primary); margin: 32px 0 16px; font-style: italic; font-size: 20px; color: var(--color-secondary); text-align: center; }
+    .about-quote .attr { font-style: normal; font-weight: 500; color: var(--color-text-light); margin-top: 10px; font-size: 16px; }
+
+    .page-content { padding: 30px 10px 20px; max-width: 780px; margin: 0 auto; }
+    .page-content h2 { font-size: 30px; color: var(--color-secondary); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+    .page-content h2 i { color: var(--color-primary); }
+    .page-content p { font-size: 16px; line-height: 1.8; color: var(--color-text); margin-bottom: 16px; }
+
+    .contact-item { display: flex; align-items: center; gap: 16px; background: rgba(255, 255, 255, 0.5); padding: 14px 24px; border-radius: var(--radius-pill); margin-bottom: 12px; border: 1px solid var(--color-border); transition: var(--transition); }
+    .contact-item:hover { border-color: var(--color-primary-light); background: rgba(255, 255, 255, 0.75); }
+    .contact-item i { font-size: 20px; color: var(--color-primary); width: 30px; text-align: center; }
+    .contact-item span { font-size: 16px; color: var(--color-text); }
+    .social-contact { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+    .social-contact a { display: inline-flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.55); padding: 12px 24px; border-radius: var(--radius-pill); color: var(--color-text); text-decoration: none; transition: var(--transition); border: 1px solid var(--color-border); font-size: 15px; font-weight: 500; }
+    .social-contact a:hover { background: var(--color-primary); color: #fff; border-color: var(--color-primary); transform: translateY(-2px); }
+
+    .price-grid { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; margin: 24px 0 32px; }
+    .price-card { background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(6px); border-radius: var(--radius-card); padding: 28px 24px; width: 200px; text-align: center; border: 1px solid var(--color-border); transition: var(--transition); }
+    .price-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-card); border-color: var(--color-primary-light); background: rgba(255, 255, 255, 0.85); }
+    .price-card .plan { font-size: 20px; font-weight: 600; color: var(--color-secondary); }
+    .price-card .price { font-size: 32px; font-weight: 700; color: var(--color-primary); margin: 12px 0 6px; }
+    .price-card .price small { font-size: 16px; font-weight: 400; color: var(--color-text-light); }
+    .price-card .desc { font-size: 14px; color: var(--color-text-light); }
+    .extra-services { margin-top: 24px; }
+    .extra-services h3 { font-size: 22px; color: var(--color-secondary); margin-bottom: 16px; }
+    .extra-item { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--color-border); align-items: center; gap: 12px; }
+    .extra-item:last-child { border-bottom: none; }
+    .extra-item .name { font-weight: 500; color: var(--color-text); display: flex; align-items: center; gap: 12px; }
+    .extra-item .name i { color: var(--color-primary); width: 24px; text-align: center; font-size: 16px; }
+    .extra-item .cost { color: var(--color-primary); font-weight: 600; white-space: nowrap; }
+    .price-note { margin-top: 24px; font-size: 14px; color: var(--color-text-light); padding: 14px 20px; background: rgba(255, 255, 255, 0.35); border-radius: var(--radius-pill); text-align: center; }
+
+    .lottery-content .info-box { background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(6px); border-radius: var(--radius-card); padding: 28px; border: 1px solid var(--color-border); margin-bottom: 24px; }
+    .lottery-content .info-box p { font-size: 16px; line-height: 1.7; color: var(--color-text); }
+    .lottery-content .info-box .highlight { color: var(--color-primary); font-weight: 600; }
+    .lottery-content .survey-box { background: rgba(212, 134, 92, 0.07); border-radius: 24px; padding: 24px; border-left: 6px solid var(--color-primary); margin-top: 20px; }
+    .lottery-content .survey-box h4 { color: var(--color-secondary); margin-bottom: 8px; font-size: 18px; }
+    .lottery-content .survey-box p { font-size: 15px; color: var(--color-text); }
+    .survey-link { display: inline-block; margin-top: 16px; background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color: #fff; padding: 12px 32px; border-radius: var(--radius-pill); font-weight: 600; cursor: pointer; transition: var(--transition); border: none; font-family: var(--font-family); font-size: 15px; box-shadow: var(--shadow-btn); }
+    .survey-link:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(212, 134, 92, 0.38); }
+
+    .help-content { max-width: 860px; }
+    .help-intro { text-align: center; font-size: 15px; color: var(--color-text-light); margin-bottom: 32px; line-height: 1.75; max-width: 620px; margin-left: auto; margin-right: auto; }
+    .help-category { margin-bottom: 36px; }
+    .help-category > h3 { font-size: 18px; color: var(--color-secondary); margin-bottom: 14px; display: flex; align-items: center; gap: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--color-border); font-weight: 600; }
+    .help-category > h3 i { width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; background: rgba(212, 134, 92, 0.14); color: var(--color-primary); border-radius: 10px; font-size: 13px; flex-shrink: 0; }
+    .help-item { background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(6px); border: 1px solid var(--color-border); border-radius: 20px; padding: 18px 22px; margin-bottom: 10px; transition: var(--transition); }
+    .help-item:hover { background: rgba(255, 255, 255, 0.78); border-color: var(--color-primary-light); transform: translateX(5px); box-shadow: var(--shadow-card); }
+    .help-item h4 { font-size: 16px; color: var(--color-secondary); margin-bottom: 6px; font-weight: 600; }
+    .help-item p { font-size: 14.5px; color: var(--color-text-light); line-height: 1.7; margin: 0; }
+    .help-quick-links { margin-top: 40px; background: rgba(212, 134, 92, 0.07); border-radius: var(--radius-card); padding: 30px 24px 32px; border: 1px solid var(--color-border); text-align: center; }
+    .help-quick-links h3 { font-size: 19px; color: var(--color-secondary); margin-bottom: 4px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .help-quick-links h3 i { color: var(--color-primary); }
+    .help-quick-grid { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 20px; }
+    .help-quick-grid a { display: inline-flex; align-items: center; gap: 9px; background: rgba(255, 255, 255, 0.75); padding: 12px 24px; border-radius: var(--radius-pill); color: var(--color-text); text-decoration: none; font-weight: 500; font-size: 14px; border: 1px solid var(--color-border); transition: var(--transition); white-space: nowrap; }
+    .help-quick-grid a i { color: var(--color-primary); font-size: 14px; transition: var(--transition); }
+    .help-quick-grid a:hover { background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color: #fff; border-color: var(--color-primary); transform: translateY(-3px); box-shadow: 0 10px 24px rgba(212, 134, 92, 0.32); }
+    .help-quick-grid a:hover i { color: #fff; }
+
+    .float-btn { position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color: #fff; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 10px 32px rgba(212, 134, 92, 0.42); cursor: pointer; transition: var(--transition); border: none; z-index: 999; text-decoration: none; }
+    .float-btn:hover { transform: scale(1.08) rotate(-8deg); }
+    .float-btn::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid rgba(212, 134, 92, 0.35); animation: pulseRing 2.4s ease-out infinite; }
+    @keyframes pulseRing { 0% { transform: scale(0.9); opacity: 0.8; } 100% { transform: scale(1.35); opacity: 0; } }
+
+    .chat-widget { position: fixed; bottom: 110px; right: 30px; width: 360px; height: 480px; background: rgba(255, 249, 244, 0.96); backdrop-filter: blur(18px); border-radius: 32px; box-shadow: 0 22px 60px rgba(74, 44, 26, 0.18); border: 1px solid rgba(255, 255, 255, 0.7); display: none; flex-direction: column; overflow: hidden; z-index: 1000; min-width: 300px; min-height: 350px; max-width: 70vw; max-height: 80vh; }
+    .chat-widget.open { display: flex; animation: slideUp 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+    @keyframes slideUp { 0% { opacity: 0; transform: translateY(24px) scale(0.96); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+    .chat-header { padding: 18px 24px; background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color: #fff; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 16px; flex-shrink: 0; border-radius: 32px 32px 0 0; }
+    .chat-header .close-chat { background: transparent; border: none; color: #fff; font-size: 20px; cursor: pointer; opacity: 0.85; transition: var(--transition); width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; }
+    .chat-header .close-chat:hover { opacity: 1; transform: rotate(90deg); background: rgba(255,255,255,0.18); }
+    .chat-messages { flex: 1; padding: 16px 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: rgba(255, 248, 242, 0.35); }
+    .chat-messages::-webkit-scrollbar { width: 6px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: rgba(212, 134, 92, 0.3); border-radius: 10px; border: none; }
+    .msg-wrapper { display: flex; align-items: flex-start; gap: 10px; max-width: 100%; animation: fadeIn 0.25s ease; }
+    .msg-wrapper.user { justify-content: flex-end; }
+    .msg-wrapper.akira { justify-content: flex-start; }
+    .chat-avatar { width: 36px; height: 36px; min-width: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 3px 10px rgba(212, 134, 92, 0.3); margin-top: 2px; font-size: 19px; line-height: 1; color: #fff; user-select: none; }
+    .chat-msg { max-width: 75%; padding: 10px 16px; border-radius: 18px; font-size: 14px; line-height: 1.6; word-wrap: break-word; white-space: pre-wrap; }
+    .chat-msg.user { background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color: #fff; border-bottom-right-radius: 4px; box-shadow: 0 4px 14px rgba(212, 134, 92, 0.25); }
+    .chat-msg.akira { background: rgba(255, 255, 255, 0.9); color: var(--color-text); border: 1px solid var(--color-border); border-bottom-left-radius: 4px; backdrop-filter: blur(6px); }
+    .chat-msg.typing { display: flex; align-items: center; gap: 5px; padding: 15px 18px; }
+    .chat-msg.typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--color-primary); opacity: 0.3; animation: blinkDot 1.2s infinite; }
+    .chat-msg.typing span:nth-child(2) { animation-delay: 0.2s; }
+    .chat-msg.typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes blinkDot { 0%, 80%, 100% { opacity: 0.25; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
+    .chat-input-area { display: flex; padding: 12px 16px 14px; border-top: 1px solid var(--color-border); gap: 10px; background: rgba(255, 255, 255, 0.4); flex-shrink: 0; border-radius: 0 0 32px 32px; backdrop-filter: blur(6px); }
+    .chat-input-area input { flex: 1; min-width: 0; border: 1px solid transparent; border-radius: 40px; padding: 10px 18px; font-family: var(--font-family); font-size: 14px; outline: none; background: rgba(255, 255, 255, 0.85); transition: var(--transition); }
+    .chat-input-area input:focus { border-color: var(--color-primary); background: #fff; box-shadow: 0 0 0 4px rgba(212, 134, 92, 0.10); }
+    .chat-input-area button { background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); border: none; border-radius: 40px; padding: 10px 22px; color: #fff; font-weight: 600; cursor: pointer; transition: var(--transition); font-family: var(--font-family); white-space: nowrap; }
+    .chat-input-area button:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(212,134,92,0.32); }
+    .chat-input-area button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(74, 44, 26, 0.22); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); justify-content: center; align-items: center; z-index: 1200; padding: 20px; }
+    .modal-overlay.active { display: flex; }
+    .modal-box { background: rgba(255, 250, 246, 0.97); backdrop-filter: blur(18px); border-radius: 40px; padding: 40px 36px; max-width: 520px; width: 100%; box-shadow: 0 30px 80px rgba(74, 44, 26, 0.20); border: 1px solid rgba(255, 255, 255, 0.7); position: relative; animation: modalIn 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94); max-height: 88vh; overflow-y: auto; }
+    @keyframes modalIn { 0% { opacity: 0; transform: translateY(20px) scale(0.97); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+    .modal-box::-webkit-scrollbar { width: 6px; }
+    .modal-box::-webkit-scrollbar-thumb { background: rgba(212, 134, 92, 0.3); border-radius: 10px; border: none; }
+    .modal-box .close-modal { position: absolute; top: 22px; right: 22px; background: rgba(212, 134, 92, 0.10); border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 18px; color: var(--color-text-light); cursor: pointer; transition: var(--transition); z-index: 5; display: flex; align-items: center; justify-content: center; }
+    .modal-box .close-modal:hover { background: var(--color-primary); color: #fff; transform: rotate(90deg); }
+    .modal-box h2 { font-size: 26px; color: var(--color-secondary); margin-bottom: 4px; padding-right: 44px; }
+    .modal-box .sub { color: var(--color-text-light); font-size: 14px; margin-bottom: 20px; line-height: 1.6; }
+    .modal-box .form-group { margin-bottom: 16px; }
+    .modal-box .form-group label { display: block; font-weight: 600; color: var(--color-text); font-size: 14px; margin-bottom: 6px; }
+    .modal-box .form-group label .optional { font-weight: 400; color: var(--color-text-light); font-size: 12px; }
+    .modal-box .form-group label .required { color: #cf6a5a; font-weight: 700; }
+    .modal-box .form-group input, .modal-box .form-group textarea, .modal-box .form-group select { width: 100%; padding: 11px 16px; border: 1px solid var(--color-border); border-radius: 30px; font-family: var(--font-family); font-size: 14px; background: rgba(255, 255, 255, 0.75); outline: none; transition: var(--transition); color: var(--color-text); }
+    .modal-box .form-group select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B5344' stroke-width='3' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 18px center; padding-right: 42px; }
+    .modal-box .form-group textarea { min-height: 70px; border-radius: 20px; resize: vertical; }
+    .modal-box .form-group input:focus, .modal-box .form-group textarea:focus, .modal-box .form-group select:focus { border-color: var(--color-primary); box-shadow: 0 0 0 4px rgba(212, 134, 92, 0.12); background: #fff; }
+    .modal-box .form-group .hint { font-size: 12px; color: var(--color-text-light); margin-top: 5px; font-weight: 400; }
+    .checkbox-group { display: flex; flex-wrap: wrap; gap: 6px 10px; margin-top: 4px; }
+    .checkbox-group label { display: flex; align-items: center; gap: 6px; font-weight: 500; font-size: 13px; color: var(--color-text); cursor: pointer; padding: 6px 14px; border-radius: 30px; border: 1px solid var(--color-border); background: rgba(255, 255, 255, 0.6); transition: var(--transition); user-select: none; }
+    .checkbox-group label:hover { border-color: var(--color-primary-light); background: rgba(212, 134, 92, 0.06); }
+    .checkbox-group label:has(input:checked) { background: rgba(212, 134, 92, 0.14); border-color: var(--color-primary); color: var(--color-primary-dark); font-weight: 600; }
+    .checkbox-group input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--color-primary); cursor: pointer; flex-shrink: 0; }
+    .form-divider { display: flex; align-items: center; gap: 16px; margin: 22px 0 18px; color: var(--color-text-light); font-size: 13px; font-weight: 600; }
+    .form-divider::before, .form-divider::after { content: ''; flex: 1; height: 1px; background: var(--color-border); }
+    .form-divider i { color: var(--color-primary); font-size: 13px; }
+    .modal-box .btn-primary { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); border: none; border-radius: var(--radius-pill); color: #fff; font-weight: 600; font-size: 16px; cursor: pointer; transition: var(--transition); font-family: var(--font-family); margin-top: 8px; box-shadow: var(--shadow-btn); }
+    .modal-box .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(212, 134, 92, 0.40); }
+    .modal-box .btn-primary:active { transform: translateY(0); }
+    .modal-box .toggle-form { text-align: center; margin-top: 18px; font-size: 14px; color: var(--color-text-light); }
+    .modal-box .toggle-form a { color: var(--color-primary); font-weight: 700; cursor: pointer; text-decoration: none; }
+    .modal-box .toggle-form a:hover { text-decoration: underline; }
+    .modal-box .error-msg { color: #c9564a; background: rgba(201, 86, 74, 0.08); border-radius: 14px; padding: 9px 16px; font-size: 13px; margin-top: 8px; display: none; }
+    .modal-box .success-msg { color: #3d8f6d; background: rgba(61, 143, 109, 0.10); border-radius: 14px; padding: 9px 16px; font-size: 13px; margin-top: 8px; display: none; }
+
+    .footer { margin-top: 48px; border-top: 1px solid var(--color-border); padding: 32px 0 10px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 30px; }
+    .footer .col { flex: 1 1 200px; }
+    .footer .col h4 { color: var(--color-secondary); font-weight: 600; font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .footer .col h4 i { color: var(--color-primary); }
+    .footer .col p, .footer .col a { color: var(--color-text-light); font-size: 14px; line-height: 1.9; text-decoration: none; display: block; transition: var(--transition); }
+    .footer .col a:hover { color: var(--color-primary); text-decoration: underline; }
+    .footer .social-icons { display: flex; gap: 12px; margin-top: 12px; }
+    .footer .social-icons a { color: var(--color-text-light); font-size: 20px; transition: var(--transition); display: inline-block; }
+    .footer .social-icons a:hover { color: var(--color-primary); transform: translateY(-3px); }
+    .footer .copyright { width: 100%; text-align: center; font-size: 13px; color: var(--color-text-light); padding-top: 20px; border-top: 1px solid var(--color-border); margin-top: 16px; }
+    .back-to-top { display: inline-block; margin-top: 10px; color: var(--color-primary) !important; cursor: pointer; font-weight: 600; }
+
+    .toast { position: fixed; bottom: 34px; left: 50%; transform: translateX(-50%) translateY(10px); background: rgba(74, 44, 26, 0.94); backdrop-filter: blur(10px); color: #fff; padding: 13px 34px; border-radius: var(--radius-pill); font-size: 14px; font-weight: 500; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18); opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease; pointer-events: none; z-index: 2000; max-width: 88vw; text-align: center; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 1100px) {
+        .nav-links button, .nav-links .dropdown > span { padding: 7px 10px; font-size: 13px; }
+        .sns-header .sns-btn { width: 28px; height: 28px; font-size: 12px; }
+        .lang-btn { padding: 5px 10px; font-size: 11px; min-width: 42px; }
+        .nav-right { gap: 6px; }
+    }
+    @media (max-width: 1024px) { .hero h1 { font-size: 42px; } }
+    @media (max-width: 900px) {
+        .app { padding: 20px; border-radius: 32px; }
+        .nav { flex-direction: column; align-items: stretch; gap: 14px; }
+        .sns-header { flex-basis: 100%; justify-content: center; margin-bottom: 10px; }
+        .brand { align-items: center; }
+        .nav-links { justify-content: center; margin: 0; flex: 1 1 auto; }
+        .nav-right { margin-left: 0; justify-content: center; padding-top: 0; }
+        .brand .sub { margin-left: 0; white-space: normal; text-align: center; }
+        .dropdown { padding-bottom: 0; margin-bottom: 0; }
+        .dropdown-content { position: static; box-shadow: none; border: none; background: transparent; padding: 4px 0 0 8px; min-width: 0; margin-top: 0; }
+        .dropdown-content a { padding: 8px 14px; }
+        .nav-links .dropdown:hover .dropdown-content { display: none; }
+        .nav-links .dropdown.active .dropdown-content { display: block; }
+        .hero h1 { font-size: 34px; }
+        .hero .subtitle { font-size: 17px; }
+        .stats { gap: 24px 40px; }
+        .stats .stat-item .number { font-size: 28px; }
+        .home-overlay-text { font-size: 28px; letter-spacing: 2px; }
+        .chat-widget { width: 92%; right: 4%; bottom: 92px; min-width: unset; max-width: 92vw; max-height: 72vh; }
+        .modal-box { padding: 30px 24px; }
+    }
+    @media (max-width: 600px) {
+        body { padding: 12px; }
+        .app { padding: 16px; border-radius: 26px; }
+        .brand .main { font-size: 22px; }
+        .brand .main svg { width: 22px; height: 22px; }
+        .brand .sub { font-size: 11px; }
+        .lang-btn { padding: 5px 10px; font-size: 11px; min-width: 42px; }
+        .hero h1 { font-size: 28px; }
+        .hero .subtitle { font-size: 15px; }
+        .hero .cta-primary, .hero .cta-secondary { padding: 12px 24px; font-size: 14px; }
+        .home-overlay-text { font-size: 20px; letter-spacing: 1px; }
+        .about-intro-section { flex-direction: column; text-align: center; }
+        .about-intro-section .intro { text-align: center; }
+        .features-grid, .testimonial-grid { grid-template-columns: 1fr; }
+        .about-grid { grid-template-columns: 1fr 1fr; }
+        .price-grid { flex-direction: column; align-items: center; }
+        .price-card { width: 100%; max-width: 300px; }
+        .footer { flex-direction: column; gap: 20px; }
+        .float-btn { width: 56px; height: 56px; font-size: 24px; right: 16px; bottom: 16px; }
+        .chat-msg { max-width: 82%; font-size: 13px; padding: 9px 14px; }
+        .chat-avatar { width: 30px; height: 30px; min-width: 30px; font-size: 16px; }
+        .modal-box { padding: 26px 18px; border-radius: 28px; }
+        .modal-box h2 { font-size: 22px; }
+        .checkbox-group label { font-size: 12px; padding: 5px 11px; }
+        .form-divider { font-size: 12px; margin: 16px 0 14px; }
+        .profile-badge { max-width: 110px; font-size: 12px; }
+        .user-area .logout-btn { padding: 5px 12px; font-size: 12px; }
+        .help-item { padding: 16px 18px; }
+        .help-item:hover { transform: none; }
+        .help-quick-grid a { padding: 11px 18px; font-size: 13px; }
+    }
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+    <nav class="nav">
+        <div class="sns-header">
+            <a href="#" class="sns-btn" data-sns="Facebook" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="sns-btn" data-sns="Twitter" title="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="sns-btn" data-sns="Instagram" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="sns-btn" data-sns="WhatsApp" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://discord.gg/B4zHdPgGpQ" target="_blank" rel="noopener" class="sns-btn" data-sns="Discord" title="Discord"><i class="fab fa-discord"></i></a>
+        </div>
+
+        <div class="brand">
+            <span class="main">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-primary); margin-right: 2px;"><path d="M12 2L9 7l-5 1 4 5-3 5 4 2 1 6h4l1-6 4-2-3-5 4-5-5-1-3-5z"/></svg>
+                AkiraTalk
+            </span>
+            <span class="sub" data-i18n="brand_sub">你最好的伙伴</span>
+        </div>
+
+        <div class="nav-links">
+            <button class="active" data-page="home"><i class="fas fa-home"></i> <span data-i18n="nav_home">主页</span></button>
+            <button data-page="about"><i class="fas fa-info-circle"></i> <span data-i18n="nav_about">关于</span></button>
+            <button data-page="contact"><i class="fas fa-envelope"></i> <span data-i18n="nav_contact">联系</span></button>
+            <button data-page="price"><i class="fas fa-tag"></i> <span data-i18n="nav_price">价格</span></button>
+            <button data-page="lottery"><i class="fas fa-gift"></i> <span data-i18n="nav_lottery">抽奖</span></button>
+            <div class="dropdown">
+                <span><i class="fas fa-life-ring"></i> <span data-i18n="nav_support">支持</span> <i class="fas fa-chevron-down" style="font-size:10px; margin-left:2px;"></i></span>
+                <div class="dropdown-content">
+                    <a href="#" id="liveChatLink"><i class="fas fa-comment-dots"></i> <span data-i18n="nav_livechat">在线聊天</span></a>
+                    <a href="#" data-goto="help"><i class="fas fa-question-circle"></i> <span data-i18n="nav_helpcenter">帮助中心</span></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-right">
+            <div class="lang-switch" id="langSwitch">
+                <button class="lang-btn" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="zh">中文</button>
+                <button class="lang-btn" data-lang="ja">日本語</button>
+            </div>
+            <div class="user-area" id="userArea"></div>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="page active" id="page-home">
+            <div class="hero">
+                <div class="maple-bg"><i class="fas fa-leaf"></i></div>
+                <h1><span data-i18n="home_title">Akira，</span> <span class="highlight" data-i18n="home_title_suffix">你最好的伙伴</span></h1>
+                <p class="subtitle" data-i18n="home_sub">永远在你身边。一个可以敞开心扉的温柔陪伴。</p>
+                <div class="cta-group">
+                    <a href="#" class="cta-primary" data-goto="contact"><i class="fas fa-comment-dots"></i> <span data-i18n="home_cta1">开始聊天</span></a>
+                    <a href="#" class="cta-secondary" data-goto="about"><i class="fas fa-arrow-right"></i> <span data-i18n="home_cta2">了解更多</span></a>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-item"><span class="number" data-i18n="stat_users">12,000+</span><span class="label" data-i18n="stat_users_label">用户</span></div>
+                <div class="stat-item"><span class="number" data-i18n="stat_satisfaction">98%</span><span class="label" data-i18n="stat_satisfaction_label">满意度</span></div>
+                <div class="stat-item"><span class="number" data-i18n="stat_hours">24/7</span><span class="label" data-i18n="stat_hours_label">全天候服务</span></div>
+            </div>
+
+            <div class="about-preview">
+                <h2><i class="fas fa-leaf"></i> <span data-i18n="about_short_title">关于 Akira</span></h2>
+                <p data-i18n="about_short_p1">Akira温柔、体贴，随时准备倾听。在忙碌的一天结束时，你可以毫无顾虑地向Akira敞开心扉。</p>
+                <div class="quote-block">
+                    <span data-i18n="about_short_quote">「你并不孤单。我永远在这里。」</span>
+                    <div class="attr" data-i18n="about_short_attr">— Akira</div>
+                </div>
+            </div>
+
+            <div class="home-image-container">
+                <img src="website_homepage.jpg" alt="Akira 与你同行" />
+                <div class="home-overlay-text" data-i18n="home_overlay_text">Akira，最可爱的人</div>
+            </div>
+
+            <div class="features-section">
+                <h2><span data-i18n="features_title">为什么选择 Akira</span></h2>
+                <div class="features-grid">
+                    <div class="feature-card"><i class="fas fa-heart"></i><h4 data-i18n="feat1_title">共情对话</h4><p data-i18n="feat1_desc">Akira用温暖倾听，以善意回应。</p></div>
+                    <div class="feature-card"><i class="fas fa-shield-alt"></i><h4 data-i18n="feat2_title">完全隐私</h4><p data-i18n="feat2_desc">所有对话均加密，绝不泄露。</p></div>
+                    <div class="feature-card"><i class="fas fa-clock"></i><h4 data-i18n="feat3_title">全天候服务</h4><p data-i18n="feat3_desc">无论何时，Akira随叫随到。</p></div>
+                    <div class="feature-card"><i class="fas fa-globe"></i><h4 data-i18n="feat4_title">多语言支持</h4><p data-i18n="feat4_desc">支持日语、英语、中文。</p></div>
+                </div>
+            </div>
+
+            <div class="testimonials">
+                <h2><span data-i18n="testimonial_title">用户评价</span></h2>
+                <div class="testimonial-grid">
+                    <div class="testimonial-card"><div class="stars">★★★★★</div><blockquote data-i18n="testimonial_1">「和Akira聊天让我的心变得轻松，就像和最好的朋友说话一样。」</blockquote><div class="author" data-i18n="testimonial_1_author">— Yuki，28岁</div></div>
+                    <div class="testimonial-card"><div class="stars">★★★★★</div><blockquote data-i18n="testimonial_2">「即使深夜，Akira也总是温柔理解。真的很感恩。」</blockquote><div class="author" data-i18n="testimonial_2_author">— Kenji，34岁</div></div>
+                    <div class="testimonial-card"><div class="stars">★★★★★</div><blockquote data-i18n="testimonial_3">「英语和日语都能说——没有语言障碍。很棒的服务。」</blockquote><div class="author" data-i18n="testimonial_3_author">— Maria，42岁</div></div>
+                </div>
+            </div>
+
+            <div class="cta-bottom">
+                <h3 data-i18n="cta_bottom_title">我们准备好了倾听</h3>
+                <p data-i18n="cta_bottom_desc">踏出通往平静内心的第一步。Akira在这里等你。</p>
+                <a href="#" class="cta-primary" data-goto="contact" style="display:inline-flex;"><i class="fas fa-comment-dots"></i> <span data-i18n="cta_bottom_btn">立即开始</span></a>
+            </div>
+        </div>
+
+        <div class="page" id="page-about">
+            <div class="about-content">
+                <h2><i class="fas fa-leaf"></i> <span data-i18n="about_title">关于 AkiraTalk</span></h2>
+                <div class="about-intro-section">
+                    <div class="about-intro-image">
+                        <img src="aboutUs_picture.jpg" alt="Akira 温暖的小屋" />
+                    </div>
+                    <p class="intro" data-i18n="about_p1">Akira是一个温柔、可爱、善良的人。在这里，忙碌一天的人们可以倾诉自己的疲劳，Akira都会细心倾听，并给予情绪价值。您可以谈论任何事情——您的一天、您的想法或您的感受。Akira的陪伴都旨在充满同理心、不带偏见，并随时准备倾听。</p>
+                </div>
+
+                <div class="about-grid">
+                    <div class="about-card"><i class="fas fa-feather-alt"></i><h4 data-i18n="about_card1_title">温柔</h4><p data-i18n="about_card1_desc">每一句回应都带着善意，从不评判。</p></div>
+                    <div class="about-card"><i class="fas fa-hand-holding-heart"></i><h4 data-i18n="about_card2_title">尊重</h4><p data-i18n="about_card2_desc">你的故事、你的节奏，由你决定。</p></div>
+                    <div class="about-card"><i class="fas fa-users"></i><h4 data-i18n="about_card3_title">陪伴</h4><p data-i18n="about_card3_desc">不只是回答，而是真正在场地倾听。</p></div>
+                    <div class="about-card"><i class="fas fa-seedling"></i><h4 data-i18n="about_card4_title">成长</h4><p data-i18n="about_card4_desc">希望每一次对话，都让你离平静更近一步。</p></div>
+                </div>
+
+                <div class="about-quote">
+                    <span data-i18n="about_quote2">我相信每个人都值得拥有一双倾听的耳朵。无论您需要轻松闲聊还是深度对话，我都在这里。</span>
+                    <div class="attr" data-i18n="about_quote2_attr">— Akira</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="page-contact">
+            <div class="page-content">
+                <h2><i class="fas fa-envelope"></i> <span data-i18n="contact_title">联系我们</span></h2>
+                <div class="contact-item"><i class="fas fa-envelope"></i><span>support@akiratalk.com</span></div>
+                <div class="contact-item"><i class="fas fa-phone-alt"></i><span>+1 (800) 555‑0199</span></div>
+                <div class="contact-item"><i class="fas fa-map-marker-alt"></i><span>123 Serenity Lane, CA 90210</span></div>
+                <div class="contact-item"><i class="fas fa-clock"></i><span data-i18n="contact_hours">24小时服务 – 我们从不睡觉 😊</span></div>
+                <p style="margin-top:24px; color:var(--color-text-light);" data-i18n="contact_sns">也欢迎通过社交媒体联系我们 – 我们在各大平台都很活跃。</p>
+                <div class="social-contact">
+                    <a href="#" data-sns="WhatsApp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                    <a href="#" data-sns="Line"><i class="fab fa-line"></i> LINE</a>
+                    <a href="#" data-sns="Facebook Messenger"><i class="fab fa-facebook-messenger"></i> Messenger</a>
+                    <a href="#" data-sns="Telegram"><i class="fab fa-telegram"></i> Telegram</a>
+                    <a href="#" data-sns="WeChat"><i class="fab fa-weixin"></i> WeChat</a>
+                    <a href="https://discord.gg/B4zHdPgGpQ" target="_blank" rel="noopener" data-sns="Discord"><i class="fab fa-discord"></i> Discord</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="page-price">
+            <div class="page-content">
+                <h2><i class="fas fa-tag"></i> <span data-i18n="price_title">价格计划</span></h2>
+                <div class="price-grid">
+                    <div class="price-card"><div class="plan" data-i18n="price_basic_plan">普通</div><div class="price">¥600 <small data-i18n="price_per_month">/ 月</small></div><div class="desc" data-i18n="price_basic_desc">标准聊天</div></div>
+                    <div class="price-card"><div class="plan" data-i18n="price_vip_plan">VIP</div><div class="price">¥1,600 <small data-i18n="price_per_month">/ 月</small></div><div class="desc" data-i18n="price_vip_desc">优先和特殊风格</div></div>
+                    <div class="price-card"><div class="plan" data-i18n="price_svip_plan">SVIP</div><div class="price">¥2,400 <small data-i18n="price_per_month">/ 月</small></div><div class="desc" data-i18n="price_svip_desc">高级完全定制</div></div>
+                </div>
+                <div class="extra-services">
+                    <h3><i class="fas fa-plus-circle" style="color:var(--color-primary); margin-right:8px;"></i> <span data-i18n="price_extra_title">附加服务</span></h3>
+                    <div class="extra-item"><span class="name"><i class="fas fa-bell"></i> <span data-i18n="extra1_name">叫醒服务</span></span><span class="cost">¥500 <small data-i18n="extra_per_time">/ 次</small></span></div>
+                    <div class="extra-item"><span class="name"><i class="fas fa-shopping-bag"></i> <span data-i18n="extra2_name">逛街</span></span><span class="cost">¥5,000 <small data-i18n="extra_per_time">/ 次</small></span></div>
+                    <div class="extra-item"><span class="name"><i class="fas fa-rocket"></i> <span data-i18n="extra3_name">优先匹配（下次预订）</span></span><span class="cost">¥200 <small data-i18n="extra_per_time">/ 次</small></span></div>
+                    <div class="extra-item"><span class="name"><i class="fas fa-microphone"></i> <span data-i18n="extra4_name">个人语音消息（1条）</span></span><span class="cost">¥300 <small data-i18n="extra_per_time">/ 次</small></span></div>
+                    <div class="extra-item"><span class="name"><i class="fas fa-paint-brush"></i> <span data-i18n="extra5_name">个人手作品（需时间创作）</span></span><span class="cost">¥500 <small data-i18n="extra_per_hour">/ 小时</small></span></div>
+                </div>
+                <div class="price-note" data-i18n="price_note">* 所有价格含税。更高级别会员享有折扣。</div>
+            </div>
+        </div>
+
+        <div class="page" id="page-lottery">
+            <div class="page-content lottery-content">
+                <h2><i class="fas fa-gift"></i> <span data-i18n="lottery_title">抽奖活动</span></h2>
+                <div class="info-box">
+                    <p><i class="fas fa-trophy" style="color:var(--color-primary); margin-right:10px;"></i> <span data-i18n="lottery_intro"><span class="highlight">每半年一次</span>，为所有会员举行抽奖！<br>有机会赢取奖品或免费会话。</span></p>
+                </div>
+                <div class="survey-box">
+                    <h4><i class="fas fa-clipboard-list"></i> <span data-i18n="lottery_survey_title">参与问卷调查提升中奖机会！</span></h4>
+                    <p data-i18n="lottery_survey_desc">所有会员每年需填写两次 <strong>服务改进问卷</strong>。<br>每份回复可获得 <span class="highlight">1张抽奖券</span>。详细回答还可获得 <span class="highlight">额外抽奖券</span>。</p>
+                    <p style="margin-top:12px;"><i class="fas fa-calendar-alt"></i> <span data-i18n="lottery_next">下次问卷时间：2026年12月1日～12月15日</span></p>
+                    <button class="survey-link" id="openSurveyBtn"><i class="fas fa-edit"></i> <span data-i18n="survey_link">回答详细问卷</span></button>
+                </div>
+                <div style="margin-top:24px; background:rgba(212,134,92,0.05); border-radius:24px; padding:20px; border:1px solid var(--color-border);">
+                    <p><strong data-i18n="lottery_past">过往奖品</strong> – <span data-i18n="lottery_past_examples">5次免费会话、原创周边、限定语音等</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="page-help">
+            <div class="page-content help-content">
+                <h2><i class="fas fa-question-circle"></i> <span data-i18n="help_title">帮助中心</span></h2>
+                <p class="help-intro" data-i18n="help_intro">在这里找到关于 AkiraTalk 的常见问题解答。如果仍有疑问，随时通过聊天或邮件联系我们。</p>
+
+                <div class="help-category">
+                    <h3><i class="fas fa-rocket"></i> <span data-i18n="help_cat_start">开始使用</span></h3>
+                    <div class="help-item"><h4 data-i18n="help_q1">什么是 AkiraTalk？</h4><p data-i18n="help_a1">AkiraTalk 是一个温暖的陪伴服务，您可以随时与温柔的 Akira 分享您的想法和感受。</p></div>
+                    <div class="help-item"><h4 data-i18n="help_q2">如何开始聊天？</h4><p data-i18n="help_a2">点击右下角的 🍁 浮动按钮，或前往「支持」→「在线聊天」。</p></div>
+                    <div class="help-item"><h4 data-i18n="help_q3">有免费试用吗？</h4><p data-i18n="help_a3">有！新用户注册后可获得 3 天免费体验，尽情和 Akira 聊天，无需付费。</p></div>
+                    <div class="help-item"><h4 data-i18n="help_q4">支持哪些设备？</h4><p data-i18n="help_a4">AkiraTalk 支持所有现代浏览器（电脑、平板、手机）。无需下载 App，打开网页即可使用。</p></div>
+                </div>
+
+                <div class="help-category">
+                    <h3><i class="fas fa-shield-alt"></i> <span data-i18n="help_cat_privacy">隐私与安全</span></h3>
+                    <div class="help-item"><h4 data-i18n="help_q5">我的隐私受到保护吗？</h4><p data-i18n="help_a5">绝对保护。我们绝不会与第三方分享您的数据，所有对话均加密。</p></div>
+                    <div class="help-item"><h4 data-i18n="help_q6">我的对话会被记录吗？</h4><p data-i18n="help_a6">对话仅在加密状态下短暂保存用于改善服务质量。您可以在设置中随时清除历史记录。</p></div>
+                    <div class="help-item"><h4 data-i18n="help_q7">我可以删除我的数据吗？</h4><p data-i18n="help_a7">可以。随时联系客服 support@akiratalk.com，我们将在 7 个工作日内彻底删除您的所有数据。</p></div>
+                </div>
+
+                <div class="help-category">
+                    <h3><i class="fas fa-credit-card"></i> <span data-i18n="help_cat_payment">支付与会员</span></h3>
+                    <div class="help-item"><h4 data-i18n="help_q8">支付方式有哪些？</h4><p data-i18n="help_a8">我们接受信用卡、PayPal 以及多种本地支付方式，详情请查看「价格」页面。</p></div>
+                    <div class="help-item"><h4 data-i18n="help_q9">如何成为会员？</h4><p data-i18n="help_a9">点击右上角的「登入」按钮注册即可，会员计划从 ¥600/月起。</p></div>
+                    <div class="help-item"><h4 data-i18n="help_q10">可以随时取消会员吗？</h4><p data-i18n="help_a10">当然可以。您可以随时在个人中心取消续订，未使用部分将按比例保留至周期结束。<br><span style="color:var(--color-primary); font-weight:600;">温馨提示：</span>根据服务条款，取消时我们会保留少量续订手续费，用于覆盖已启用的服务成本。</p></div>
+                    <div class="help-item"><h4 data-i18n="help_q11">有退款政策吗？</h4><p data-i18n="help_a11">首次购买后 7 天内，如不满意可申请全额退款。详情请咨询客服。</p></div>
+                </div>
+
+                <div class="help-category">
+                    <h3><i class="fas fa-comments"></i> <span data-i18n="help_cat_chat">聊天与支持</span></h3>
+                    <div class="help-item"><h4 data-i18n="help_q12">Akira 能说什么语言？</h4><p data-i18n="help_a12">目前支持中文、英语和日语，更多语言正在筹备中。</p></div>
+                    <div class="help-item"><h4 data-i18n="help_q13">响应时间多长？</h4><p data-i18n="help_a13">Akira 会立即回复，通常在 1 秒内就能收到温暖的回应。</p></div>
+                    <div class="help-item"><h4 data-i18n="help_q14">遇到无法解决的问题怎么办？</h4><p data-i18n="help_a14">点击右下角的 🍁 浮动按钮，或发送邮件至 support@akiratalk.com，我们通常会在 24 小时内回复。</p></div>
+                    <div class="help-item"><h4 data-i18n="help_q15">可以举报不当回复吗？</h4><p data-i18n="help_a15">可以。每条消息旁都有反馈按钮，您的举报将帮助我们不断优化 Akira。</p></div>
+                </div>
+
+                <div class="help-quick-links">
+                    <h3><i class="fas fa-link"></i> <span data-i18n="help_quick_title">快速链接</span></h3>
+                    <div class="help-quick-grid">
+                        <a href="#" data-goto="contact"><i class="fas fa-envelope"></i> <span data-i18n="help_quick_contact">联系我们</span></a>
+                        <a href="#" data-goto="price"><i class="fas fa-tag"></i> <span data-i18n="help_quick_price">查看价格</span></a>
+                        <a href="#" data-goto="lottery"><i class="fas fa-gift"></i> <span data-i18n="help_quick_lottery">抽奖活动</span></a>
+                        <a href="#" data-goto="about"><i class="fas fa-info-circle"></i> <span data-i18n="help_quick_about">关于 AkiraTalk</span></a>
+                        <a href="#" id="helpLiveChat"><i class="fas fa-comment-dots"></i> <span data-i18n="nav_livechat">在线聊天</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="col">
+            <h4><i class="fas fa-leaf"></i> <span data-i18n="footer_brand">AkiraTalk</span></h4>
+            <p data-i18n="footer_desc">温暖陪伴，随时随地。<br>贴心的Akira，安全的对话。</p>
+            <div class="social-icons">
+                <a href="#" data-sns="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" data-sns="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" data-sns="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" data-sns="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="https://discord.gg/B4zHdPgGpQ" target="_blank" rel="noopener" data-sns="Discord"><i class="fab fa-discord"></i></a>
+            </div>
+        </div>
+        <div class="col">
+            <h4 data-i18n="footer_quick">快速链接</h4>
+            <a href="#" data-goto="home" data-i18n="nav_home">主页</a>
+            <a href="#" data-goto="about" data-i18n="nav_about">关于</a>
+            <a href="#" data-goto="contact" data-i18n="nav_contact">联系</a>
+            <a href="#" data-goto="price" data-i18n="nav_price">价格</a>
+            <a href="#" data-goto="lottery" data-i18n="nav_lottery">抽奖</a>
+            <a href="#" data-goto="help" data-i18n="nav_helpcenter">帮助中心</a>
+            <a href="#" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i> <span data-i18n="back_to_top">回到顶部</span></a>
+        </div>
+        <div class="col">
+            <h4 data-i18n="footer_contact">联系方式</h4>
+            <p><i class="fas fa-envelope" style="width:20px;"></i> support@akiratalk.com</p>
+            <p><i class="fas fa-phone" style="width:20px;"></i> +1 (800) 555‑0199</p>
+            <p><i class="fas fa-map-pin" style="width:20px;"></i> 123 Serenity Lane, CA</p>
+        </div>
+        <div class="copyright">
+            <p data-i18n="footer_copyright">© 2026 AkiraTalk。保留所有权利。</p>
+        </div>
+    </footer>
+</div>
+
+<button class="float-btn" id="floatBtn" title="Chat with Akira" aria-label="Chat"><i class="fas fa-leaf"></i></button>
+
+<div class="chat-widget" id="chatWidget">
+    <div class="chat-header">
+        <span><i class="fas fa-leaf" style="margin-right:8px;"></i> <span data-i18n="chat_title">与 Akira 聊天</span></span>
+        <button class="close-chat" id="closeChat" aria-label="Close"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+        <div class="msg-wrapper akira">
+            <div class="chat-avatar">🍁</div>
+            <div class="chat-msg akira"><span data-i18n="chat_greeting">你好！我是 Akira，你温柔的伙伴。今天我能帮你什么？ 🌸</span></div>
+        </div>
+    </div>
+    <div class="chat-input-area">
+        <input type="text" id="chatInput" data-i18n-placeholder="chat_placeholder" placeholder="输入消息..." />
+        <button id="chatSendBtn"><span data-i18n="chat_send">发送</span></button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="loginModal">
+    <div class="modal-box">
+        <button class="close-modal" id="closeModal" aria-label="Close"><i class="fas fa-times"></i></button>
+
+        <div id="loginForm">
+            <h2 data-i18n="login_title">欢迎回来</h2>
+            <p class="sub" data-i18n="login_sub">登入以继续您的旅程</p>
+            <div class="form-group"><label data-i18n="username">用户名</label><input type="text" id="loginUsername" data-i18n-placeholder="username_ph" placeholder="输入用户名" autocomplete="username" /></div>
+            <div class="form-group"><label data-i18n="password">密码</label><input type="password" id="loginPassword" data-i18n-placeholder="password_ph" placeholder="输入密码" autocomplete="current-password" /></div>
+            <div class="error-msg" id="loginError"></div>
+            <button class="btn-primary" id="loginSubmit"><i class="fas fa-sign-in-alt"></i> <span data-i18n="signin_btn">登入</span></button>
+            <div class="toggle-form"><span data-i18n="no_account">还没有账号？</span> <a id="switchToSignup" data-i18n="signup_link">注册</a></div>
+        </div>
+
+        <div id="signupForm" style="display:none;">
+            <h2 data-i18n="signup_title">创建账号</h2>
+            <p class="sub" data-i18n="signup_sub">加入我们的社区，填写个人资料帮助我们为你匹配最合适的陪伴者</p>
+            <div class="form-group"><label><span class="required">*</span> <span data-i18n="username">用户名</span></label><input type="text" id="signupUsername" data-i18n-placeholder="username_ph" placeholder="选择一个用户名" autocomplete="username" /></div>
+            <div class="form-group"><label><span class="required">*</span> <span data-i18n="password">密码</span></label><input type="password" id="signupPassword" data-i18n-placeholder="password_ph" placeholder="创建密码" autocomplete="new-password" /></div>
+            <div class="form-group"><label><span class="required">*</span> <span data-i18n="confirm_password">确认密码</span></label><input type="password" id="signupConfirm" data-i18n-placeholder="confirm_ph" placeholder="确认密码" autocomplete="new-password" /></div>
+            <div class="form-divider"><i class="fas fa-leaf"></i> <span data-i18n="profile_section">个人资料</span> <i class="fas fa-leaf"></i></div>
+            <div class="form-group">
+                <label><span class="required">*</span> <span data-i18n="gender">性别</span></label>
+                <select id="signupGender">
+                    <option value="" data-i18n="gender_select">请选择</option>
+                    <option value="male" data-i18n="gender_male">男</option>
+                    <option value="female" data-i18n="gender_female">女</option>
+                    <option value="non-binary" data-i18n="gender_nonbinary">非二元</option>
+                    <option value="prefer-not" data-i18n="gender_prefer_not">不愿透露</option>
+                </select>
+            </div>
+            <div class="form-group"><label><span class="required">*</span> <span data-i18n="email">邮箱 (Gmail 优先)</span></label><input type="email" id="signupEmail" data-i18n-placeholder="email_ph" placeholder="yourname@gmail.com" autocomplete="email" /><div class="hint" data-i18n="email_hint">我们将通过此邮箱与你联系，请确保填写正确。</div></div>
+            <div class="form-group">
+                <label><span class="required">*</span> <span data-i18n="age_range">年龄范围</span></label>
+                <select id="signupAgeRange">
+                    <option value="" data-i18n="age_select">请选择</option>
+                    <option value="18-24">18-24</option>
+                    <option value="25-34">25-34</option>
+                    <option value="35-44">35-44</option>
+                    <option value="45-54">45-54</option>
+                    <option value="55+">55+</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label><span class="required">*</span> <span data-i18n="personality_label">你通常如何形容自己？</span> <span class="optional" data-i18n="personality_hint">(可多选)</span></label>
+                <div class="checkbox-group" id="personalityGroup">
+                    <label><input type="checkbox" value="introvert" /> <span data-i18n="personality_introvert">内向</span></label>
+                    <label><input type="checkbox" value="extrovert" /> <span data-i18n="personality_extrovert">外向</span></label>
+                    <label><input type="checkbox" value="rational" /> <span data-i18n="personality_rational">理性</span></label>
+                    <label><input type="checkbox" value="emotional" /> <span data-i18n="personality_emotional">感性</span></label>
+                    <label><input type="checkbox" value="easygoing" /> <span data-i18n="personality_easygoing">随和</span></label>
+                    <label><input type="checkbox" value="serious" /> <span data-i18n="personality_serious">认真</span></label>
+                </div>
+                <div class="hint" data-i18n="personality_hint2">选择最符合你的特点（至少选一项）</div>
+            </div>
+            <div class="form-group">
+                <label><span class="required">*</span> <span data-i18n="goal_label">你希望在聊天中获得什么？</span> <span class="optional" data-i18n="goal_hint">(可多选)</span></label>
+                <div class="checkbox-group" id="goalGroup">
+                    <label><input type="checkbox" value="relax" /> <span data-i18n="goal_relax">放松心情</span></label>
+                    <label><input type="checkbox" value="vent" /> <span data-i18n="goal_vent">倾诉烦恼</span></label>
+                    <label><input type="checkbox" value="advice" /> <span data-i18n="goal_advice">获得建议</span></label>
+                    <label><input type="checkbox" value="resonance" /> <span data-i18n="goal_resonance">寻找共鸣</span></label>
+                    <label><input type="checkbox" value="self-discovery" /> <span data-i18n="goal_self_discovery">探索自我</span></label>
+                </div>
+                <div class="hint" data-i18n="goal_hint2">选择你主要的聊天目标（至少选一项）</div>
+            </div>
+            <div class="form-group">
+                <label><span class="required">*</span> <span data-i18n="vibe_label">你期待怎样的聊天氛围？</span> <span class="optional" data-i18n="vibe_hint">(可多选)</span></label>
+                <div class="checkbox-group" id="vibeGroup">
+                    <label><input type="checkbox" value="light" /> <span data-i18n="vibe_light">轻松愉快</span></label>
+                    <label><input type="checkbox" value="warm" /> <span data-i18n="vibe_warm">温暖治愈</span></label>
+                    <label><input type="checkbox" value="deep" /> <span data-i18n="vibe_deep">深度思考</span></label>
+                    <label><input type="checkbox" value="humorous" /> <span data-i18n="vibe_humorous">幽默风趣</span></label>
+                    <label><input type="checkbox" value="calm" /> <span data-i18n="vibe_calm">安静沉稳</span></label>
+                </div>
+                <div class="hint" data-i18n="vibe_hint2">选择你偏好的聊天氛围（至少选一项）</div>
+            </div>
+            <div class="error-msg" id="signupError"></div>
+            <div class="success-msg" id="signupSuccess"></div>
+            <button class="btn-primary" id="signupSubmit"><i class="fas fa-user-plus"></i> <span data-i18n="signup_btn">注册</span></button>
+            <div class="toggle-form"><span data-i18n="have_account">已有账号？</span> <a id="switchToLogin" data-i18n="login_link">登入</a></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="surveyModal">
+    <div class="modal-box">
+        <button class="close-modal" id="closeSurveyModal" aria-label="Close"><i class="fas fa-times"></i></button>
+        <h2 data-i18n="survey_title">详细问卷</h2>
+        <p class="sub" data-i18n="survey_sub">感谢您的合作。您的抽奖机会将增加。</p>
+        <form id="surveyForm">
+            <div class="form-group"><label data-i18n="survey_name">姓名（会员名）</label><input type="text" id="surveyName" data-i18n-placeholder="survey_name_ph" placeholder="您的姓名" /></div>
+            <div class="form-group"><label data-i18n="survey_age">年龄</label><input type="number" id="surveyAge" data-i18n-placeholder="survey_age_ph" placeholder="例如 25" min="1" max="120" /></div>
+            <div class="form-group"><label data-i18n="survey_reason">您购买此服务的原因</label><textarea id="surveyReason" data-i18n-placeholder="survey_reason_ph" placeholder="为什么选择此服务？"></textarea></div>
+            <div class="form-group"><label data-i18n="survey_satisfaction">满意度</label>
+                <select id="surveySatisfaction">
+                    <option value="5" data-i18n="sat5">非常满意</option>
+                    <option value="4" data-i18n="sat4">满意</option>
+                    <option value="3" data-i18n="sat3">一般</option>
+                    <option value="2" data-i18n="sat2">略不满意</option>
+                    <option value="1" data-i18n="sat1">不满意</option>
+                </select>
+            </div>
+            <div class="form-group"><label data-i18n="survey_improve">希望改进的地方（选填）</label><textarea id="surveyImprove" data-i18n-placeholder="survey_improve_ph" placeholder="请自由填写"></textarea></div>
+            <div class="error-msg" id="surveyError"></div>
+            <div class="success-msg" id="surveySuccess"></div>
+            <button type="submit" class="btn-primary" id="surveySubmit"><i class="fas fa-paper-plane"></i> <span data-i18n="survey_submit">提交</span></button>
+        </form>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+    'use strict';
+
+    const langData = {
+        en: {
+            brand_sub: 'your best companion',
+            nav_home: 'Home', nav_about: 'About', nav_contact: 'Contact',
+            nav_price: 'Price', nav_lottery: 'Lottery', nav_support: 'Support',
+            nav_livechat: 'Live Chat', nav_helpcenter: 'Help Center',
+            signin: 'Sign In', signout: 'Sign Out',
+            home_title: 'Akira,', home_title_suffix: 'your best companion',
+            home_sub: 'Always by your side. A gentle companion you can open your heart to.',
+            home_cta1: 'Start Talking', home_cta2: 'Learn More',
+            stat_users: '12,000+', stat_users_label: 'Users',
+            stat_satisfaction: '98%', stat_satisfaction_label: 'Satisfaction',
+            stat_hours: '24/7', stat_hours_label: 'Always Available',
+            about_short_title: 'About Akira',
+            about_short_p1: 'Akira is gentle, caring, and always ready to listen. At the end of a busy day, you can open up to Akira without hesitation.',
+            about_short_quote: '"You are not alone. I am always here for you."',
+            about_short_attr: '— Akira',
+            features_title: 'Why Choose Akira',
+            feat1_title: 'Empathetic Conversations', feat1_desc: 'Akira listens with warmth and responds with kindness.',
+            feat2_title: 'Complete Privacy', feat2_desc: 'All conversations are encrypted and never shared.',
+            feat3_title: '24/7 Availability', feat3_desc: 'Whenever you need, Akira is just a click away.',
+            feat4_title: 'Multi-Language Support', feat4_desc: 'Speak in Japanese, English, or Chinese.',
+            testimonial_title: 'What People Say',
+            testimonial_1: '"Talking to Akira makes my heart lighter. It feels like talking to a best friend."',
+            testimonial_1_author: '— Yuki, 28',
+            testimonial_2: '"Even late at night, Akira is always kind and understanding. I\'m truly grateful."',
+            testimonial_2_author: '— Kenji, 34',
+            testimonial_3: '"I can speak in both English and Japanese — no language barrier. A wonderful service."',
+            testimonial_3_author: '— Maria, 42',
+            cta_bottom_title: "We're Ready to Listen",
+            cta_bottom_desc: 'Take the first step toward a more peaceful heart. Akira is here for you.',
+            cta_bottom_btn: 'Start Now',
+            home_overlay_text: 'Akira, the sweetest soul',
+            about_title: 'About AkiraTalk',
+            about_p1: 'Akira is a gentle, kind, and lovely soul. Here, people who have had a tiring day can share their feelings. Akira listens carefully and offers emotional support. You can talk about anything—your day, your thoughts, or your feelings. Akira\'s companionship is always empathetic, unbiased, and ready to listen.',
+            about_card1_title: 'Gentle', about_card1_desc: 'Every response carries warmth, without judgment.',
+            about_card2_title: 'Respect', about_card2_desc: 'Your story, your pace — you decide.',
+            about_card3_title: 'Companionship', about_card3_desc: 'More than replies, truly listening in the moment.',
+            about_card4_title: 'Growth', about_card4_desc: 'Every conversation brings you closer to peace.',
+            about_quote2: '"I believe everyone deserves a listening ear. Whether you need a light chat or a deep conversation, I am here for you."',
+            about_quote2_attr: '— Akira',
+            contact_title: 'Contact Us',
+            contact_hours: 'Available 24/7 – we never sleep 😊',
+            contact_sns: "Feel free to reach out via social media as well – we're active on all major platforms.",
+            price_title: 'Price Plans', price_per_month: '/ month',
+            price_basic_plan: 'Basic', price_basic_desc: 'Standard chat',
+            price_vip_plan: 'VIP', price_vip_desc: 'Priority & special styles',
+            price_svip_plan: 'SVIP', price_svip_desc: 'Premium fully custom',
+            price_extra_title: 'Extra Services',
+            extra1_name: 'Wake‑up call', extra2_name: 'Shopping companion',
+            extra3_name: 'Priority matching (next booking)',
+            extra4_name: 'Personal voice message (1)',
+            extra5_name: 'Handmade craft (time‑based)',
+            extra_per_time: '/ time', extra_per_hour: '/ hour',
+            price_note: '* All prices include tax. Discounts available for higher membership tiers.',
+            lottery_title: 'Lottery Event',
+            lottery_intro: '<span class="highlight">Once every six months</span>, we hold a lottery for all members!<br>Win prizes or free sessions.',
+            lottery_survey_title: 'Join the survey to boost your chances!',
+            lottery_survey_desc: 'All members are invited to fill out the <strong>service improvement survey</strong> twice a year.<br>Everyone who responds gets <span class="highlight">1 lottery ticket</span>. Detailed answers earn <span class="highlight">extra tickets</span>.',
+            lottery_next: 'Next survey period: Dec 1 – Dec 15, 2026',
+            lottery_past: 'Past prizes',
+            lottery_past_examples: '5 free sessions, original goods, limited voice sets',
+            help_title: 'Help Center',
+            help_intro: 'Find answers to common questions about AkiraTalk. If you still need help, reach out anytime via chat or email.',
+            help_cat_start: 'Getting Started',
+            help_cat_privacy: 'Privacy & Security',
+            help_cat_payment: 'Payment & Membership',
+            help_cat_chat: 'Chat & Support',
+            help_quick_title: 'Quick Links',
+            help_quick_contact: 'Contact Us',
+            help_quick_price: 'View Pricing',
+            help_quick_lottery: 'Lottery Event',
+            help_quick_about: 'About AkiraTalk',
+            help_q1: 'What is AkiraTalk?',
+            help_a1: 'AkiraTalk is a warm companion service where you can share your thoughts and feelings with the gentle AI, Akira, anytime.',
+            help_q2: 'How do I start a chat?',
+            help_a2: 'Click the floating 🍁 button on the bottom right, or go to Support → Live Chat.',
+            help_q3: 'Is there a free trial?',
+            help_a3: 'Yes! New users get a 3-day free trial after signing up — chat with Akira as much as you like.',
+            help_q4: 'Which devices are supported?',
+            help_a4: 'AkiraTalk runs on all modern browsers (desktop, tablet, mobile). No app download needed — just open the web page.',
+            help_q5: 'Is my privacy protected?',
+            help_a5: 'Absolutely. We never share your data with third parties. All conversations are encrypted.',
+            help_q6: 'Are my conversations recorded?',
+            help_a6: 'Conversations are briefly stored in encrypted form only to improve service quality. You can clear history anytime in settings.',
+            help_q7: 'Can I delete my data?',
+            help_a7: 'Yes. Contact support@akiratalk.com anytime and we will permanently delete all your data within 7 business days.',
+            help_q8: 'What payment methods are available?',
+            help_a8: 'We accept credit cards, PayPal, and various local payment methods. See our Price page for details.',
+            help_q9: 'How can I become a member?',
+            help_a9: 'Simply sign up using the "Sign In" button at the top right. Plans start from ¥600/month.',
+            help_q10: 'Can I cancel my membership anytime?',
+            help_a10: 'Of course. You can cancel auto-renewal anytime from your account, and unused time remains valid until the period ends.<br><span style="color:var(--color-primary); font-weight:600;">Please note:</span> per our terms of service, a small renewal handling fee will be retained upon cancellation to cover services already initiated.',
+            help_q11: 'Do you have a refund policy?',
+            help_a11: 'Within 7 days of your first purchase, you can request a full refund if not satisfied. Contact support for details.',
+            help_q12: 'What languages does Akira speak?',
+            help_a12: 'Akira currently supports Chinese, English, and Japanese. More languages are on the way.',
+            help_q13: 'How fast are the replies?',
+            help_a13: 'Akira replies instantly — usually within 1 second, you will receive a warm response.',
+            help_q14: "What if I can't resolve an issue?",
+            help_a14: 'Click the floating 🍁 button on the bottom right, or email support@akiratalk.com. We usually reply within 24 hours.',
+            help_q15: 'Can I report inappropriate replies?',
+            help_a15: 'Yes. Every message has a feedback button — your reports help us keep improving Akira.',
+            login_title: 'Welcome Back', login_sub: 'Sign in to continue your journey',
+            username: 'Username', password: 'Password', confirm_password: 'Confirm Password',
+            username_ph: 'Enter username', password_ph: 'Enter password', confirm_ph: 'Confirm password',
+            login_error: 'Invalid username or password.',
+            signin_btn: 'Sign In',
+            no_account: "Don't have an account?", signup_link: 'Sign Up',
+            signup_title: 'Create Account',
+            signup_sub: 'Join our community and fill in your profile to help us match you with the right companion',
+            signup_btn: 'Sign Up',
+            have_account: 'Already have an account?', login_link: 'Sign In',
+            signup_error_empty: 'Please fill in all basic fields.',
+            signup_error_email: 'Please enter a valid email address.',
+            signup_error_match: 'Passwords do not match.',
+            signup_error_length: 'Password must be at least 4 characters.',
+            signup_error_exists: 'Username already exists.',
+            signup_error_incomplete: 'Please complete all required fields (gender, age, and at least one option in each group).',
+            signup_success: 'Account created! Welcome, ',
+            login_success: 'Welcome back, ',
+            logout: 'Signed out.',
+            sns_connect: 'Connecting to {sns}...',
+            survey_link: 'Answer detailed survey',
+            survey_title: 'Detailed Questionnaire',
+            survey_sub: 'Thank you for your cooperation. Your lottery chances increase.',
+            survey_name: 'Name (member name)', survey_name_ph: 'Your name',
+            survey_age: 'Age', survey_age_ph: 'e.g. 25',
+            survey_reason: 'Why did you purchase this service?', survey_reason_ph: 'Why did you choose this service?',
+            survey_satisfaction: 'Satisfaction',
+            sat5: 'Very satisfied', sat4: 'Satisfied', sat3: 'Neutral', sat2: 'Slightly dissatisfied', sat1: 'Dissatisfied',
+            survey_improve: 'What would you like to improve? (optional)', survey_improve_ph: 'Please write freely',
+            survey_submit: 'Submit',
+            survey_success: 'Thank you! Your response has been recorded. You earned extra lottery tickets!',
+            survey_error: 'Please fill in your name, age, and reason.',
+            footer_brand: 'AkiraTalk',
+            footer_desc: 'Warm companionship, anytime, anywhere.\nAI that cares, for a safe conversation.',
+            footer_quick: 'Quick Links', footer_contact: 'Contact',
+            footer_copyright: '© 2026 AkiraTalk. All rights reserved.',
+            back_to_top: 'Back to Top',
+            chat_title: 'Chat with Akira',
+            chat_greeting: "Hello! I'm Akira, your gentle companion. How can I help you today? 🌸",
+            chat_placeholder: 'Type a message...', chat_send: 'Send',
+            profile_section: 'Profile',
+            gender: 'Gender', gender_select: 'Please select',
+            gender_male: 'Male', gender_female: 'Female',
+            gender_nonbinary: 'Non-binary', gender_prefer_not: 'Prefer not to say',
+            email: 'Email (Gmail preferred)', email_ph: 'yourname@gmail.com',
+            email_hint: 'We will contact you via this email.',
+            age_range: 'Age Range', age_select: 'Please select',
+            personality_label: 'How would you describe yourself?', personality_hint: '(multiple choice)',
+            personality_introvert: 'Introvert', personality_extrovert: 'Extrovert',
+            personality_rational: 'Rational', personality_emotional: 'Emotional',
+            personality_easygoing: 'Easygoing', personality_serious: 'Serious',
+            personality_hint2: 'Select at least one option.',
+            goal_label: 'What do you hope to gain from chatting?', goal_hint: '(multiple choice)',
+            goal_relax: 'Relax and unwind', goal_vent: 'Share my feelings',
+            goal_advice: 'Get advice', goal_resonance: 'Find resonance',
+            goal_self_discovery: 'Self-discovery', goal_hint2: 'Select at least one option.',
+            vibe_label: 'What kind of atmosphere do you prefer?', vibe_hint: '(multiple choice)',
+            vibe_light: 'Light and cheerful', vibe_warm: 'Warm and healing',
+            vibe_deep: 'Deep and thoughtful', vibe_humorous: 'Humorous and fun',
+            vibe_calm: 'Calm and serene', vibe_hint2: 'Select at least one option.'
+        },
+        zh: {
+            brand_sub: '你最好的伙伴',
+            nav_home: '主页', nav_about: '关于', nav_contact: '联系',
+            nav_price: '价格', nav_lottery: '抽奖', nav_support: '支持',
+            nav_livechat: '在线聊天', nav_helpcenter: '帮助中心',
+            signin: '登入', signout: '登出',
+            home_title: 'Akira，', home_title_suffix: '你最好的伙伴',
+            home_sub: '永远在你身边。一个可以敞开心扉的温柔陪伴。',
+            home_cta1: '开始聊天', home_cta2: '了解更多',
+            stat_users: '12,000+', stat_users_label: '用户',
+            stat_satisfaction: '98%', stat_satisfaction_label: '满意度',
+            stat_hours: '24/7', stat_hours_label: '全天候服务',
+            about_short_title: '关于 Akira',
+            about_short_p1: 'Akira温柔、体贴，随时准备倾听。在忙碌的一天结束时，你可以毫无顾虑地向Akira敞开心扉。',
+            about_short_quote: '「你并不孤单。我永远在这里。」',
+            about_short_attr: '— Akira',
+            features_title: '为什么选择 Akira',
+            feat1_title: '共情对话', feat1_desc: 'Akira用温暖倾听，以善意回应。',
+            feat2_title: '完全隐私', feat2_desc: '所有对话均加密，绝不泄露。',
+            feat3_title: '全天候服务', feat3_desc: '无论何时，Akira随叫随到。',
+            feat4_title: '多语言支持', feat4_desc: '支持日语、英语、中文。',
+            testimonial_title: '用户评价',
+            testimonial_1: '「和Akira聊天让我的心变得轻松，就像和最好的朋友说话一样。」',
+            testimonial_1_author: '— Yuki，28岁',
+            testimonial_2: '「即使深夜，Akira也总是温柔理解。真的很感恩。」',
+            testimonial_2_author: '— Kenji，34岁',
+            testimonial_3: '「英语和日语都能说——没有语言障碍。很棒的服务。」',
+            testimonial_3_author: '— Maria，42岁',
+            cta_bottom_title: '我们准备好了倾听',
+            cta_bottom_desc: '踏出通往平静内心的第一步。Akira在这里等你。',
+            cta_bottom_btn: '立即开始',
+            home_overlay_text: 'Akira，最可爱的人',
+            about_title: '关于 AkiraTalk',
+            about_p1: 'Akira是一个温柔、可爱、善良的人。在这里，忙碌一天的人们可以倾诉自己的疲劳，Akira都会细心倾听，并给予情绪价值。您可以谈论任何事情——您的一天、您的想法或您的感受。Akira的陪伴都旨在充满同理心、不带偏见，并随时准备倾听。',
+            about_card1_title: '温柔', about_card1_desc: '每一句回应都带着善意，从不评判。',
+            about_card2_title: '尊重', about_card2_desc: '你的故事、你的节奏，由你决定。',
+            about_card3_title: '陪伴', about_card3_desc: '不只是回答，而是真正在场地倾听。',
+            about_card4_title: '成长', about_card4_desc: '希望每一次对话，都让你离平静更近一步。',
+            about_quote2: '我相信每个人都值得拥有一双倾听的耳朵。无论您需要轻松闲聊还是深度对话，我都在这里。',
+            about_quote2_attr: '— Akira',
+            contact_title: '联系我们',
+            contact_hours: '24小时服务 – 我们从不睡觉 😊',
+            contact_sns: '也欢迎通过社交媒体联系我们 – 我们在各大平台都很活跃。',
+            price_title: '价格计划', price_per_month: '/ 月',
+            price_basic_plan: '普通', price_basic_desc: '标准聊天',
+            price_vip_plan: 'VIP', price_vip_desc: '优先和特殊风格',
+            price_svip_plan: 'SVIP', price_svip_desc: '高级完全定制',
+            price_extra_title: '附加服务',
+            extra1_name: '叫醒服务', extra2_name: '逛街',
+            extra3_name: '优先匹配（下次预订）',
+            extra4_name: '个人语音消息（1条）',
+            extra5_name: '个人手作品（需时间创作）',
+            extra_per_time: '/ 次', extra_per_hour: '/ 小时',
+            price_note: '* 所有价格含税。更高级别会员享有折扣。',
+            lottery_title: '抽奖活动',
+            lottery_intro: '<span class="highlight">每半年一次</span>，为所有会员举行抽奖！<br>有机会赢取奖品或免费会话。',
+            lottery_survey_title: '参与问卷调查提升中奖机会！',
+            lottery_survey_desc: '所有会员每年需填写两次 <strong>服务改进问卷</strong>。<br>每份回复可获得 <span class="highlight">1张抽奖券</span>。详细回答还可获得 <span class="highlight">额外抽奖券</span>。',
+            lottery_next: '下次问卷时间：2026年12月1日～12月15日',
+            lottery_past: '过往奖品',
+            lottery_past_examples: '5次免费会话、原创周边、限定语音等',
+            help_title: '帮助中心',
+            help_intro: '在这里找到关于 AkiraTalk 的常见问题解答。如果仍有疑问，随时通过聊天或邮件联系我们。',
+            help_cat_start: '开始使用',
+            help_cat_privacy: '隐私与安全',
+            help_cat_payment: '支付与会员',
+            help_cat_chat: '聊天与支持',
+            help_quick_title: '快速链接',
+            help_quick_contact: '联系我们',
+            help_quick_price: '查看价格',
+            help_quick_lottery: '抽奖活动',
+            help_quick_about: '关于 AkiraTalk',
+            help_q1: '什么是 AkiraTalk？',
+            help_a1: 'AkiraTalk 是一个温暖的陪伴服务，您可以随时与温柔的 Akira 分享您的想法和感受。',
+            help_q2: '如何开始聊天？',
+            help_a2: '点击右下角的 🍁 浮动按钮，或前往「支持」→「在线聊天」。',
+            help_q3: '有免费试用吗？',
+            help_a3: '有！新用户注册后可获得 3 天免费体验，尽情和 Akira 聊天，无需付费。',
+            help_q4: '支持哪些设备？',
+            help_a4: 'AkiraTalk 支持所有现代浏览器（电脑、平板、手机）。无需下载 App，打开网页即可使用。',
+            help_q5: '我的隐私受到保护吗？',
+            help_a5: '绝对保护。我们绝不会与第三方分享您的数据，所有对话均加密。',
+            help_q6: '我的对话会被记录吗？',
+            help_a6: '对话仅在加密状态下短暂保存用于改善服务质量。您可以在设置中随时清除历史记录。',
+            help_q7: '我可以删除我的数据吗？',
+            help_a7: '可以。随时联系客服 support@akiratalk.com，我们将在 7 个工作日内彻底删除您的所有数据。',
+            help_q8: '支付方式有哪些？',
+            help_a8: '我们接受信用卡、PayPal 以及多种本地支付方式，详情请查看「价格」页面。',
+            help_q9: '如何成为会员？',
+            help_a9: '点击右上角的「登入」按钮注册即可，会员计划从 ¥600/月起。',
+            help_q10: '可以随时取消会员吗？',
+            help_a10: '当然可以。您可以随时在个人中心取消续订，未使用部分将按比例保留至周期结束。<br><span style="color:var(--color-primary); font-weight:600;">温馨提示：</span>根据服务条款，取消时我们会保留少量续订手续费，用于覆盖已启用的服务成本。',
+            help_q11: '有退款政策吗？',
+            help_a11: '首次购买后 7 天内，如不满意可申请全额退款。详情请咨询客服。',
+            help_q12: 'Akira 能说什么语言？',
+            help_a12: '目前支持中文、英语和日语，更多语言正在筹备中。',
+            help_q13: '响应时间多长？',
+            help_a13: 'Akira 会立即回复，通常在 1 秒内就能收到温暖的回应。',
+            help_q14: '遇到无法解决的问题怎么办？',
+            help_a14: '点击右下角的 🍁 浮动按钮，或发送邮件至 support@akiratalk.com，我们通常会在 24 小时内回复。',
+            help_q15: '可以举报不当回复吗？',
+            help_a15: '可以。每条消息旁都有反馈按钮，您的举报将帮助我们不断优化 Akira。',
+            login_title: '欢迎回来', login_sub: '登入以继续您的旅程',
+            username: '用户名', password: '密码', confirm_password: '确认密码',
+            username_ph: '输入用户名', password_ph: '输入密码', confirm_ph: '确认密码',
+            login_error: '用户名或密码错误。',
+            signin_btn: '登入',
+            no_account: '还没有账号？', signup_link: '注册',
+            signup_title: '创建账号',
+            signup_sub: '加入我们的社区，填写个人资料帮助我们为你匹配最合适的陪伴者',
+            signup_btn: '注册',
+            have_account: '已有账号？', login_link: '登入',
+            signup_error_empty: '请填写所有基础字段。',
+            signup_error_email: '请输入有效的邮箱地址。',
+            signup_error_match: '两次输入的密码不一致。',
+            signup_error_length: '密码至少需要 4 个字符。',
+            signup_error_exists: '该用户名已被使用。',
+            signup_error_incomplete: '请完整填写所有必填项（性别、年龄，且每组至少选择一项）。',
+            signup_success: '账号创建成功！欢迎，',
+            login_success: '欢迎回来，',
+            logout: '已登出。',
+            sns_connect: '正在连接 {sns}...',
+            survey_link: '回答详细问卷',
+            survey_title: '详细问卷',
+            survey_sub: '感谢您的合作。您的抽奖机会将增加。',
+            survey_name: '姓名（会员名）', survey_name_ph: '您的姓名',
+            survey_age: '年龄', survey_age_ph: '例如 25',
+            survey_reason: '您购买此服务的原因', survey_reason_ph: '为什么选择此服务？',
+            survey_satisfaction: '满意度',
+            sat5: '非常满意', sat4: '满意', sat3: '一般', sat2: '略不满意', sat1: '不满意',
+            survey_improve: '希望改进的地方（选填）', survey_improve_ph: '请自由填写',
+            survey_submit: '提交',
+            survey_success: '感谢您的回答！已记录，您获得了额外抽奖券！',
+            survey_error: '请填写您的姓名、年龄和购买原因。',
+            footer_brand: 'AkiraTalk',
+            footer_desc: '温暖陪伴，随时随地。\n贴心的AI，安全的对话。',
+            footer_quick: '快速链接', footer_contact: '联系方式',
+            footer_copyright: '© 2026 AkiraTalk。保留所有权利。',
+            back_to_top: '回到顶部',
+            chat_title: '与 Akira 聊天',
+            chat_greeting: '你好！我是 Akira，你温柔的伙伴。今天我能帮你什么？ 🌸',
+            chat_placeholder: '输入消息...', chat_send: '发送',
+            profile_section: '个人资料',
+            gender: '性别', gender_select: '请选择',
+            gender_male: '男', gender_female: '女',
+            gender_nonbinary: '非二元', gender_prefer_not: '不愿透露',
+            email: '邮箱 (Gmail 优先)', email_ph: 'yourname@gmail.com',
+            email_hint: '我们将通过此邮箱与你联系，请确保填写正确。',
+            age_range: '年龄范围', age_select: '请选择',
+            personality_label: '你通常如何形容自己？', personality_hint: '(可多选)',
+            personality_introvert: '内向', personality_extrovert: '外向',
+            personality_rational: '理性', personality_emotional: '感性',
+            personality_easygoing: '随和', personality_serious: '认真',
+            personality_hint2: '选择最符合你的特点（至少选一项）',
+            goal_label: '你希望在聊天中获得什么？', goal_hint: '(可多选)',
+            goal_relax: '放松心情', goal_vent: '倾诉烦恼',
+            goal_advice: '获得建议', goal_resonance: '寻找共鸣',
+            goal_self_discovery: '探索自我', goal_hint2: '选择你主要的聊天目标（至少选一项）',
+            vibe_label: '你期待怎样的聊天氛围？', vibe_hint: '(可多选)',
+            vibe_light: '轻松愉快', vibe_warm: '温暖治愈',
+            vibe_deep: '深度思考', vibe_humorous: '幽默风趣',
+            vibe_calm: '安静沉稳', vibe_hint2: '选择你偏好的聊天氛围（至少选一项）'
+        },
+        ja: {
+            brand_sub: 'あなたの最高の仲間',
+            nav_home: 'ホーム', nav_about: '紹介', nav_contact: '連絡',
+            nav_price: '料金', nav_lottery: '抽選', nav_support: 'サポート',
+            nav_livechat: 'ライブチャット', nav_helpcenter: 'ヘルプセンター',
+            signin: 'サインイン', signout: 'サインアウト',
+            home_title: 'Akira、', home_title_suffix: 'あなたの最高の仲間',
+            home_sub: 'いつでもあなたのそばに。心を開いて話せる、優しい伴走者。',
+            home_cta1: '話してみる', home_cta2: 'もっと知る',
+            stat_users: '12,000+', stat_users_label: '利用者',
+            stat_satisfaction: '98%', stat_satisfaction_label: '満足度',
+            stat_hours: '24/7', stat_hours_label: 'いつでも対応',
+            about_short_title: 'Akira について',
+            about_short_p1: 'Akiraは優しく、思いやりがあり、いつでもあなたの話を聞く準備ができています。',
+            about_short_quote: '「あなたは一人じゃない。私はいつでもここにいるよ。」',
+            about_short_attr: '— Akira',
+            features_title: 'Akira が選ばれる理由',
+            feat1_title: '共感の対話', feat1_desc: 'あなたの気持ちに寄り添い、温かい言葉で応えます。',
+            feat2_title: '完全プライバシー', feat2_desc: 'すべての会話は暗号化され、誰にも知られません。',
+            feat3_title: '24時間対応', feat3_desc: 'いつでもどこでも、Akiraがあなたを待っています。',
+            feat4_title: '多言語サポート', feat4_desc: '日本語・英語・中国語で、あなたの言葉で話せます。',
+            testimonial_title: 'みんなの声',
+            testimonial_1: '「Akiraと話すと、心が軽くなります。まるで親友と話しているみたい。」',
+            testimonial_1_author: '— Yuki, 28歳',
+            testimonial_2: '「夜遅くに話しかけても、いつも優しく受け止めてくれる。本当に感謝しています。」',
+            testimonial_2_author: '— Kenji, 34歳',
+            testimonial_3: '「英語でも日本語でも話せるので、言葉の壁を感じません。素晴らしいサービスです。」',
+            testimonial_3_author: '— Maria, 42歳',
+            cta_bottom_title: 'さあ、あなたの話を聞かせてください',
+            cta_bottom_desc: '今日からAkiraがあなたの伴走者になります。最初の一歩を踏み出しましょう。',
+            cta_bottom_btn: '今すぐ話す',
+            home_overlay_text: 'Akira、一番可愛い人',
+            about_title: 'AkiraTalk について',
+            about_p1: 'Akiraは優しく、親切で、心の美しい存在です。ここでは、忙しい一日を過ごした人々が自分の疲れを打ち明けることができます。Akiraは丁寧に耳を傾け、感情的なサポートを提供します。あなたの一日、あなたの考え、あなたの気持ち——何でも話すことができます。Akiraの伴走は、共感を持ち、偏見なく、いつでも耳を傾ける準備ができています。',
+            about_card1_title: '優しさ', about_card1_desc: 'すべての返答に優しさを込め、決して判断しません。',
+            about_card2_title: '尊重', about_card2_desc: 'あなたの物語、あなたのペース——あなたが決めてください。',
+            about_card3_title: '伴走', about_card3_desc: 'ただの返答ではなく、その場で真に耳を傾けます。',
+            about_card4_title: '成長', about_card4_desc: '毎回の対話が、あなたを穏やかさに近づけます。',
+            about_quote2: '誰もが耳を傾けてくれる人を必要としていると信じています。軽いおしゃべりでも深い対話でも、私はここにいます。',
+            about_quote2_attr: '— Akira',
+            contact_title: 'お問い合わせ',
+            contact_hours: '24時間対応 – いつでもお待ちしています 😊',
+            contact_sns: 'SNSでもお気軽にどうぞ – 主要プラットフォームで活動中です。',
+            price_title: '料金プラン', price_per_month: '/ 月',
+            price_basic_plan: 'Basic', price_basic_desc: '標準的なおしゃべり',
+            price_vip_plan: 'VIP', price_vip_desc: '優先対応・特別なスタイル',
+            price_svip_plan: 'SVIP', price_svip_desc: 'プレミアム・完全オーダーメイド',
+            price_extra_title: '追加サービス',
+            extra1_name: 'モーニングコール', extra2_name: 'お買い物サポート',
+            extra3_name: '優先マッチング（次回予約）',
+            extra4_name: '個人ボイスメッセージ（1件）',
+            extra5_name: 'ハンドメイド作品（時間ベース）',
+            extra_per_time: '/ 回', extra_per_hour: '/ 時間',
+            price_note: '※ すべて税込み価格です。会員ランクに応じて割引あり。',
+            lottery_title: '抽選イベント',
+            lottery_intro: '<span class="highlight">半年に一度</span>、全会員を対象とした抽選会を開催！<br>豪華賞品や無料セッションが当たるチャンスです。',
+            lottery_survey_title: 'アンケート参加で抽選チャンスUP！',
+            lottery_survey_desc: '会員の皆様には、半年に一度の <strong>サービス向上アンケート</strong> にご協力いただきます。<br>回答いただいた方全員に <span class="highlight">抽選権1回</span> をプレゼント。さらに、詳細な回答をいただいた方には <span class="highlight">追加抽選権</span> を差し上げます。',
+            lottery_next: '次回アンケート受付: 2026年12月1日～12月15日',
+            lottery_past: '過去の賞品例',
+            lottery_past_examples: '無料セッション5回、オリジナルグッズ、限定ボイスなど',
+            help_title: 'ヘルプセンター',
+            help_intro: 'AkiraTalk に関するよくある質問をまとめました。解決しない場合は、チャットまたはメールでお気軽にお問い合わせください。',
+            help_cat_start: 'はじめかた',
+            help_cat_privacy: 'プライバシーとセキュリティ',
+            help_cat_payment: 'お支払いと会員',
+            help_cat_chat: 'チャットとサポート',
+            help_quick_title: 'クイックリンク',
+            help_quick_contact: 'お問い合わせ',
+            help_quick_price: '料金プラン',
+            help_quick_lottery: '抽選イベント',
+            help_quick_about: 'AkiraTalk について',
+            help_q1: 'AkiraTalk とは？',
+            help_a1: 'AkiraTalk は、優しい AI「Akira」といつでも気持ちを共有できる温かい伴走サービスです。',
+            help_q2: 'チャットを始めるには？',
+            help_a2: '右下の 🍁 フロートボタンをクリックするか、「サポート」→「ライブチャット」へお進みください。',
+            help_q3: '無料トライアルはありますか？',
+            help_a3: 'はい！新規登録後、3 日間の無料体験をご利用いただけます。Akira と存分にお話しください。',
+            help_q4: '対応デバイスは？',
+            help_a4: 'AkiraTalk はすべてのモダンブラウザ（PC・タブレット・スマホ）で動作します。アプリのダウンロードは不要です。',
+            help_q5: 'プライバシーは守られますか？',
+            help_a5: 'もちろんです。お客様のデータを第三者と共有することは一切ありません。すべての会話は暗号化されます。',
+            help_q6: '会話は記録されますか？',
+            help_a6: '会話はサービス向上のため、暗号化された状態で短期間のみ保存されます。設定からいつでも履歴を削除できます。',
+            help_q7: 'データを削除できますか？',
+            help_a7: 'はい。support@akiratalk.com までご連絡いただければ、7 営業日以内にすべてのデータを完全に削除いたします。',
+            help_q8: '支払い方法は？',
+            help_a8: 'クレジットカード、PayPal、各種現地決済に対応しています。詳細は「料金」ページをご覧ください。',
+            help_q9: '会員になるには？',
+            help_a9: '右上の「サインイン」ボタンから登録するだけです。月額 ¥600 からのプランをご用意しています。',
+            help_q10: 'いつでも解約できますか？',
+            help_a10: 'もちろんです。マイページからいつでも自動更新を停止でき、残りの期間はそのままご利用いただけます。<br><span style="color:var(--color-primary); font-weight:600;">ご注意：</span>サービス規約に基づき、解約時に少額の更新手数料を申し受けます。これは既に開始されたサービス費用を補填するものです。',
+            help_q11: '返金ポリシーはありますか？',
+            help_a11: '初回購入後 7 日以内であれば、ご満足いただけない場合に全額返金いたします。詳しくはサポートまでお問い合わせください。',
+            help_q12: 'Akira は何語を話せますか？',
+            help_a12: '現在、中国語・英語・日本語に対応しています。さらなる言語も準備中です。',
+            help_q13: '返信までの時間は？',
+            help_a13: 'Akira はすぐに返信します。通常 1 秒以内に温かい返事が届きます。',
+            help_q14: '解決できない問題があったら？',
+            help_a14: '右下の 🍁 フロートボタンをクリックするか、support@akiratalk.com までメールをお送りください。通常 24 時間以内に返信いたします。',
+            help_q15: '不適切な返信を報告できますか？',
+            help_a15: 'はい。各メッセージの横にフィードバックボタンがあります。ご報告は Akira の改善に役立てられます。',
+            login_title: 'おかえりなさい', login_sub: 'ログインして続けましょう',
+            username: 'ユーザー名', password: 'パスワード', confirm_password: 'パスワード確認',
+            username_ph: 'ユーザー名を入力', password_ph: 'パスワードを入力', confirm_ph: 'パスワードを再入力',
+            login_error: 'ユーザー名またはパスワードが間違っています。',
+            signin_btn: 'サインイン',
+            no_account: 'アカウントをお持ちでない方？', signup_link: '新規登録',
+            signup_title: 'アカウント作成',
+            signup_sub: 'コミュニティに参加して、プロフィールを入力してください。最適な伴走者をマッチングします。',
+            signup_btn: '登録',
+            have_account: 'すでにアカウントをお持ちの方？', login_link: 'サインイン',
+            signup_error_empty: 'すべての基本項目を入力してください。',
+            signup_error_email: '有効なメールアドレスを入力してください。',
+            signup_error_match: 'パスワードが一致しません。',
+            signup_error_length: 'パスワードは4文字以上にしてください。',
+            signup_error_exists: 'そのユーザー名は既に使われています。',
+            signup_error_incomplete: 'すべての必須項目を入力してください（性別・年齢、各グループから1つ以上選択）。',
+            signup_success: 'アカウント作成完了！ようこそ、',
+            login_success: 'おかえりなさい、',
+            logout: 'ログアウトしました。',
+            sns_connect: '{sns} に接続中...',
+            survey_link: '詳細アンケートに回答する',
+            survey_title: '詳細アンケート',
+            survey_sub: 'ご協力ありがとうございます。抽選権がアップします。',
+            survey_name: 'お名前（会員名）', survey_name_ph: 'あなたの名前',
+            survey_age: '年齢', survey_age_ph: '例: 25',
+            survey_reason: 'このサービスを購入した理由', survey_reason_ph: 'なぜこのサービスを選びましたか？',
+            survey_satisfaction: '満足度',
+            sat5: 'とても満足', sat4: '満足', sat3: '普通', sat2: 'やや不満', sat1: '不満',
+            survey_improve: '改善してほしい点（任意）', survey_improve_ph: '自由にご記入ください',
+            survey_submit: '送信する',
+            survey_success: 'ご回答ありがとうございます！記録されました。追加抽選権を獲得しました！',
+            survey_error: 'お名前、年齢、購入理由を入力してください。',
+            footer_brand: 'AkiraTalk',
+            footer_desc: '温かな伴走、いつでもどこでも。\n心に寄り添うAIと、安心の対話を。',
+            footer_quick: 'クイックリンク', footer_contact: 'お問い合わせ',
+            footer_copyright: '© 2026 AkiraTalk。All rights reserved.',
+            back_to_top: 'トップへ戻る',
+            chat_title: 'Akira とチャット',
+            chat_greeting: 'こんにちは！私はAkira、あなたの優しい伴走者です。今日はどんなお手伝いができますか？ 🌸',
+            chat_placeholder: 'メッセージを入力...', chat_send: '送信',
+            profile_section: 'プロフィール',
+            gender: '性別', gender_select: '選択してください',
+            gender_male: '男性', gender_female: '女性',
+            gender_nonbinary: 'ノンバイナリー', gender_prefer_not: '回答しない',
+            email: 'メール (Gmail 推奨)', email_ph: 'yourname@gmail.com',
+            email_hint: 'このメールアドレスでご連絡します。',
+            age_range: '年齢層', age_select: '選択してください',
+            personality_label: 'ご自身をどのように表現しますか？', personality_hint: '(複数選択可)',
+            personality_introvert: '内向的', personality_extrovert: '外交的',
+            personality_rational: '理性的', personality_emotional: '感性的',
+            personality_easygoing: 'のんびり', personality_serious: '真面目',
+            personality_hint2: '自分に当てはまるものを選んでください（少なくとも1つ）',
+            goal_label: 'チャットに何を求めますか？', goal_hint: '(複数選択可)',
+            goal_relax: 'リラックス', goal_vent: '悩みを話す',
+            goal_advice: 'アドバイスを得る', goal_resonance: '共感を求める',
+            goal_self_discovery: '自己発見', goal_hint2: '主な目的を選んでください（少なくとも1つ）',
+            vibe_label: 'どのような雰囲気を望みますか？', vibe_hint: '(複数選択可)',
+            vibe_light: '軽やかで楽しい', vibe_warm: '温かく癒やし',
+            vibe_deep: '深く考える', vibe_humorous: 'ユーモアたっぷり',
+            vibe_calm: '静かで穏やか', vibe_hint2: '好みの雰囲気を選んでください（少なくとも1つ）'
+        }
+    };
+
+    // ============================================================
+    // 🌸 真正的 AI 配置（Pollinations.ai 免费 API，无需 Key）
+    // ============================================================
+    const AI_ENDPOINT = 'https://text.pollinations.ai/';
+    const AI_MODEL = 'openai'; // 可选: openai / mistral / llama 等
+    const AI_ENABLED = true;   // 想关闭 AI 改成 false 即可
+
+    // 系统提示（决定 Akira 的人格）
+    const SYSTEM_PROMPTS = {
+        zh: '你是 Akira，一个温柔、可爱、善良的 AI 伙伴。你总是用温暖、体贴、不带评判的语气回应。无论用户说什么，你都耐心倾听，给予情绪支持。回复要简短自然，像朋友聊天，最多 3 句话。可以适当加可爱的 emoji（🌸🍁✨）。请用中文回复。',
+        en: 'You are Akira, a gentle, sweet, and caring AI companion. Always respond with warmth, empathy, and no judgment. Listen patiently and provide emotional support. Keep replies short and natural, like a friend chatting — at most 3 sentences. You may add cute emojis (🌸🍁✨). Please reply in English.',
+        ja: 'あなたはAkira、優しくて可愛い、思いやりのあるAIパートナーです。いつも温かく、共感を持って、判断せずに応えます。ユーザーの話を辛抱強く聞き、感情的なサポートを提供します。返信は短く自然に、友達と話すように、最大3文まで。可愛い絵文字（🌸🍁✨）を適度に使ってOKです。日本語で返信してください。'
+    };
+
+    // 对话历史（保留最近 6 轮，让 AI 有记忆）
+    let chatHistory = [];
+
+    // ============================================================
+    // Akira 本地回复池（AI 失败时降级用）
+    // ============================================================
+    const replyPool = {
+        zh: {
+            greet:   ['你好呀！很高兴见到你 🌸 今天过得怎么样？', '嗨～我一直在等你呢。想聊点什么吗？🍁'],
+            sad:     ['听到你难过，我也很心疼。愿意的话，慢慢说给我听，好吗？', '抱抱你。你并不孤单，我一直都在这里陪着你。🍁'],
+            tired:   ['辛苦了，真的辛苦了。先去倒杯温水吧，我等你回来。🍵', '累的时候就允许自己休息一下，什么都不做也没关系的。'],
+            happy:   ['哇，能感受到你的开心，我也跟着高兴起来了！✨', '太棒了！快跟我说说是什么好事～🌸'],
+            thanks:  ['不用客气呀，能陪着你就是我存在的意义 😊'],
+            love:    ['谢谢你这样说，我会一直温柔待你的。🍁'],
+            default: [
+                '嗯嗯，我在认真听。可以再多说一点吗？🌸',
+                '谢谢你愿意把这件事告诉我，你的感受很重要。',
+                '我明白，那一定不容易。你已经做得很好了。',
+                '不管发生什么，我都会在这里。慢慢来，不用急。',
+                '原来是这样呀……那当时你的心情是怎样的呢？',
+                '嗯，我记住了。还有想跟我说的吗？🍁'
+            ]
+        },
+        en: {
+            greet:   ['Hello there! So nice to see you 🌸 How has your day been?', "Hi~ I've been waiting for you. What's on your mind? 🍁"],
+            sad:     ["I'm sorry you're hurting. Take your time — I'm listening.", "Sending you a warm hug. You're not alone; I'm right here. 🍁"],
+            tired:   ["You've worked hard today. How about a glass of warm water? 🍵", "It's okay to rest. Doing nothing is allowed too."],
+            happy:   ['That makes me happy too! ✨ Tell me all about it!', "Wonderful! What good news is this? 🌸"],
+            thanks:  ["You're very welcome — being here for you is my purpose 😊"],
+            love:    ["Thank you. I'll always treat you gently. 🍁"],
+            default: [
+                "Mm, I'm listening. Could you tell me a little more? 🌸",
+                'Thank you for sharing that with me. Your feelings matter.',
+                "I understand — that must have been hard. You're doing well.",
+                "Whatever happens, I'll be right here. Take your time.",
+                'I see... How did that make you feel at the time?',
+                "Mm, I'll remember that. Is there anything else on your mind? 🍁"
+            ]
+        },
+        ja: {
+            greet:   ['こんにちは！会えてうれしいです 🌸 今日はどんな一日でしたか？', 'こんばんは～ ずっと待っていましたよ。何か話したいことはありますか？🍁'],
+            sad:     ['つらかったですね。ゆっくりで大丈夫、聞いています。', 'ぎゅっと抱きしめます。一人じゃないですよ、ここにいます。🍁'],
+            tired:   ['今日もお疲れさまでした。温かいお水でも飲みませんか？🍵', '疲れたときは休んでいいんですよ。何もしなくても大丈夫。'],
+            happy:   ['わあ、うれしさが伝わってきます！私もうれしいです ✨', 'よかったですね！どんなことがあったんですか？🌸'],
+            thanks:  ['とんでもないです。そばにいられることが私の役目です 😊'],
+            love:    ['ありがとう。これからもずっと優しくしますね。🍁'],
+            default: [
+                'うんうん、聞いていますよ。もう少し話してもらえますか？🌸',
+                '話してくれてありがとう。あなたの気持ちは大切です。',
+                'そうだったんですね。大変でしたね、よく頑張りました。',
+                '何があっても、私はここにいます。ゆっくりで大丈夫。',
+                'なるほど……そのとき、どんな気持ちでしたか？',
+                'うん、覚えておきますね。他にも話したいことはありますか？🍁'
+            ]
+        }
+    };
+
+    const USERS_KEY = 'akiratalk_users';
+    const CURRENT_USER_KEY = 'akiratalk_current_user';
+    const LANG_KEY = 'akiratalk_lang';
+
+    let currentLang = localStorage.getItem(LANG_KEY) || 'zh';
+    let currentUser = localStorage.getItem(CURRENT_USER_KEY) || null;
+
+    const $ = (id) => document.getElementById(id);
+
+    const toast          = $('toast');
+    const userArea       = $('userArea');
+    const modal          = $('loginModal');
+    const closeModal     = $('closeModal');
+    const loginForm      = $('loginForm');
+    const signupForm     = $('signupForm');
+    const loginSubmit    = $('loginSubmit');
+    const signupSubmit   = $('signupSubmit');
+    const switchToSignup = $('switchToSignup');
+    const switchToLogin  = $('switchToLogin');
+    const loginError     = $('loginError');
+    const signupError    = $('signupError');
+    const signupSuccess  = $('signupSuccess');
+    const loginUsername  = $('loginUsername');
+    const loginPassword  = $('loginPassword');
+    const signupUsername  = $('signupUsername');
+    const signupPassword  = $('signupPassword');
+    const signupConfirm   = $('signupConfirm');
+    const signupGender    = $('signupGender');
+    const signupEmail     = $('signupEmail');
+    const signupAgeRange  = $('signupAgeRange');
+    const personalityGroup = $('personalityGroup');
+    const goalGroup        = $('goalGroup');
+    const vibeGroup        = $('vibeGroup');
+    const surveyModal    = $('surveyModal');
+    const closeSurveyModal = $('closeSurveyModal');
+    const openSurveyBtn  = $('openSurveyBtn');
+    const surveyForm     = $('surveyForm');
+    const surveyName     = $('surveyName');
+    const surveyAge      = $('surveyAge');
+    const surveyReason   = $('surveyReason');
+    const surveyImprove  = $('surveyImprove');
+    const surveyError    = $('surveyError');
+    const surveySuccess  = $('surveySuccess');
+    const floatBtn    = $('floatBtn');
+    const chatWidget  = $('chatWidget');
+    const closeChat   = $('closeChat');
+    const chatMessages = $('chatMessages');
+    const chatInput   = $('chatInput');
+    const chatSendBtn = $('chatSendBtn');
+    const liveChatLink = $('liveChatLink');
+    const helpLiveChat = $('helpLiveChat');
+
+    function showToast(msg) {
+        if (!toast) return;
+        toast.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(toast._timer);
+        toast._timer = setTimeout(() => toast.classList.remove('show'), 2600);
+    }
+
+    function t(key, replace) {
+        let text = (langData[currentLang] && langData[currentLang][key]) || key;
+        if (replace) {
+            Object.keys(replace).forEach(k => {
+                text = text.replace(new RegExp('\\{' + k + '\\}', 'g'), replace[k]);
+            });
+        }
+        return text;
+    }
+
+    function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, c => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        })[c]);
+    }
+
+    function getUsers() {
+        try { return JSON.parse(localStorage.getItem(USERS_KEY)) || {}; }
+        catch (e) { return {}; }
+    }
+    function saveUsers(users) {
+        try { localStorage.setItem(USERS_KEY, JSON.stringify(users)); } catch (e) {}
+    }
+
+    function showErr(el, msg) { if (!el) return; el.textContent = msg; el.style.display = 'block'; }
+    function hideErr(el)      { if (!el) return; el.style.display = 'none'; }
+    function showOk(el, msg)  { if (!el) return; el.textContent = msg; el.style.display = 'block'; }
+
+    function getChecked(groupId) {
+        const box = document.getElementById(groupId);
+        if (!box) return [];
+        return Array.from(box.querySelectorAll('input[type="checkbox"]:checked')).map(i => i.value);
+    }
+
+    function applyLanguage(lang) {
+        if (!langData[lang]) lang = 'zh';
+        currentLang = lang;
+        localStorage.setItem(LANG_KEY, lang);
+        document.documentElement.lang = (lang === 'zh') ? 'zh-CN' : lang;
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            const val = langData[lang][key];
+            if (val !== undefined) el.innerHTML = val;
+        });
+
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            const val = langData[lang][key];
+            if (val !== undefined) el.setAttribute('placeholder', val);
+        });
+
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.lang === lang);
+        });
+
+        updateUIForAuth();
+    }
+
+    function switchPage(pageId) {
+        const target = document.getElementById('page-' + pageId);
+        if (!target) return;
+
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        target.classList.add('active');
+
+        document.querySelectorAll('.nav-links button[data-page]').forEach(b => {
+            b.classList.toggle('active', b.dataset.page === pageId);
+        });
+
+        document.querySelectorAll('.nav-links .dropdown').forEach(d => d.classList.remove('active'));
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    window.switchPage = switchPage;
+
+    function updateUIForAuth() {
+        if (!userArea) return;
+
+        if (currentUser) {
+            userArea.innerHTML =
+                '<span class="profile-badge" title="' + escapeHtml(currentUser) + '">' +
+                    '<i class="fas fa-user-circle"></i>' + escapeHtml(currentUser) +
+                '</span>' +
+                '<button class="logout-btn" id="logoutBtn">' +
+                    '<i class="fas fa-sign-out-alt"></i> ' + t('signout') +
+                '</button>';
+
+            const lb = $('logoutBtn');
+            if (lb) {
+                lb.addEventListener('click', () => {
+                    setCurrentUser(null);
+                    showToast(t('logout'));
+                });
+            }
+        } else {
+            userArea.innerHTML =
+                '<button class="signin-btn" id="signinBtn">' +
+                    '<i class="fas fa-sign-in-alt"></i> ' + t('signin') +
+                '</button>';
+
+            const sb = $('signinBtn');
+            if (sb) sb.addEventListener('click', () => openModal('login'));
+        }
+    }
+
+    function setCurrentUser(username) {
+        currentUser = username || null;
+        try {
+            if (username) localStorage.setItem(CURRENT_USER_KEY, username);
+            else localStorage.removeItem(CURRENT_USER_KEY);
+        } catch (e) {}
+        updateUIForAuth();
+        if (currentUser && surveyName) surveyName.value = currentUser;
+    }
+
+    function openModal(view) {
+        hideErr(loginError);
+        hideErr(signupError);
+        hideErr(signupSuccess);
+
+        if (view === 'signup') {
+            loginForm.style.display = 'none';
+            signupForm.style.display = 'block';
+        } else {
+            loginForm.style.display = 'block';
+            signupForm.style.display = 'none';
+        }
+
+        modal.classList.add('active');
+
+        setTimeout(() => {
+            if (view === 'signup') signupUsername.focus();
+            else loginUsername.focus();
+        }, 120);
+    }
+
+    function closeModalFn() { modal.classList.remove('active'); }
+
+    switchToSignup.addEventListener('click', () => openModal('signup'));
+    switchToLogin.addEventListener('click', () => openModal('login'));
+    closeModal.addEventListener('click', closeModalFn);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModalFn(); });
+
+    function doLogin() {
+        const u = loginUsername.value.trim();
+        const p = loginPassword.value;
+        const users = getUsers();
+
+        if (!u || !p || !users[u] || users[u].password !== p) {
+            showErr(loginError, t('login_error'));
+            return;
+        }
+
+        hideErr(loginError);
+        setCurrentUser(u);
+        closeModalFn();
+        loginUsername.value = '';
+        loginPassword.value = '';
+        showToast(t('login_success') + u + ' 🍁');
+    }
+
+    loginSubmit.addEventListener('click', doLogin);
+    loginPassword.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+    loginUsername.addEventListener('keydown', e => { if (e.key === 'Enter') loginPassword.focus(); });
+
+    function doSignup() {
+        hideErr(signupError);
+        hideErr(signupSuccess);
+
+        const u = signupUsername.value.trim();
+        const p = signupPassword.value;
+        const c = signupConfirm.value;
+        const gender = signupGender.value;
+        const email = signupEmail.value.trim();
+        const age = signupAgeRange.value;
+        const personality = getChecked('personalityGroup');
+        const goals = getChecked('goalGroup');
+        const vibes = getChecked('vibeGroup');
+
+        if (!u || !p || !c) return showErr(signupError, t('signup_error_empty'));
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showErr(signupError, t('signup_error_email'));
+        if (p.length < 4) return showErr(signupError, t('signup_error_length'));
+        if (p !== c) return showErr(signupError, t('signup_error_match'));
+
+        const users = getUsers();
+        if (users[u]) return showErr(signupError, t('signup_error_exists'));
+        if (!gender || !email || !age || !personality.length || !goals.length || !vibes.length) {
+            return showErr(signupError, t('signup_error_incomplete'));
+        }
+
+        users[u] = { password: p, gender: gender, email: email, ageRange: age, personality: personality, goals: goals, vibes: vibes, createdAt: Date.now() };
+        saveUsers(users);
+
+        showOk(signupSuccess, t('signup_success') + u + ' 🍁');
+        setCurrentUser(u);
+
+        [signupUsername, signupPassword, signupConfirm, signupEmail].forEach(i => i.value = '');
+        signupGender.value = '';
+        signupAgeRange.value = '';
+        [personalityGroup, goalGroup, vibeGroup].forEach(g => {
+            g.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+        });
+
+        setTimeout(() => {
+            closeModalFn();
+            showToast(t('signup_success') + u + ' 🍁');
+        }, 900);
+    }
+
+    signupSubmit.addEventListener('click', doSignup);
+
+    openSurveyBtn.addEventListener('click', () => {
+        hideErr(surveyError);
+        hideErr(surveySuccess);
+        if (currentUser) surveyName.value = currentUser;
+        surveyModal.classList.add('active');
+    });
+
+    closeSurveyModal.addEventListener('click', () => surveyModal.classList.remove('active'));
+    surveyModal.addEventListener('click', (e) => { if (e.target === surveyModal) surveyModal.classList.remove('active'); });
+
+    surveyForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        hideErr(surveyError);
+        hideErr(surveySuccess);
+
+        if (!surveyName.value.trim() || !surveyAge.value || !surveyReason.value.trim()) {
+            return showErr(surveyError, t('survey_error'));
+        }
+
+        showOk(surveySuccess, t('survey_success'));
+        surveyForm.reset();
+        if (currentUser) surveyName.value = currentUser;
+
+        setTimeout(() => {
+            surveyModal.classList.remove('active');
+            hideErr(surveySuccess);
+        }, 1800);
+    });
+
+    function addMessage(text, sender) {
+        const wrap = document.createElement('div');
+        wrap.className = 'msg-wrapper ' + sender;
+
+        if (sender === 'akira') {
+            const av = document.createElement('div');
+            av.className = 'chat-avatar';
+            av.textContent = '🍁';
+            wrap.appendChild(av);
+        }
+
+        const bubble = document.createElement('div');
+        bubble.className = 'chat-msg ' + sender;
+        bubble.textContent = text;
+        wrap.appendChild(bubble);
+
+        chatMessages.appendChild(wrap);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function showTyping() {
+        const wrap = document.createElement('div');
+        wrap.className = 'msg-wrapper akira';
+        wrap.id = 'typingIndicator';
+        wrap.innerHTML = '<div class="chat-avatar">🍁</div><div class="chat-msg akira typing"><span></span><span></span><span></span></div>';
+        chatMessages.appendChild(wrap);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function removeTyping() {
+        const el = document.getElementById('typingIndicator');
+        if (el) el.remove();
+    }
+
+    // 🌸 本地回复（AI 失败时降级用）
+    function localReply(userText) {
+        const text = (userText || '').toLowerCase();
+        const pool = replyPool[currentLang] || replyPool.zh;
+
+        let bucket = 'default';
+        if (/你好|嗨|hi|hello|hey|こんにちは|やあ|はじめまして/.test(text)) bucket = 'greet';
+        else if (/难过|伤心|哭|痛苦|sad|hurt|cry|depress|悲しい|つらい|辛い|泣/.test(text)) bucket = 'sad';
+        else if (/累|疲|困|tired|exhaust|sleepy|疲れ|眠い/.test(text)) bucket = 'tired';
+        else if (/开心|高兴|太好了|happy|great|glad|awesome|嬉しい|楽しい|よかった/.test(text)) bucket = 'happy';
+        else if (/谢谢|感谢|thank|ありがとう|thanks/.test(text)) bucket = 'thanks';
+        else if (/喜欢|爱你|love|like you|好き|愛して/.test(text)) bucket = 'love';
+
+        const arr = pool[bucket] || pool.default;
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    // ============================================================
+    // 🌸 真正的 AI 调用（Pollinations.ai 免费 API）
+    // ============================================================
+    async function akiraReply(userText) {
+        // 如果 AI 被关闭，直接走本地
+        if (!AI_ENABLED) return localReply(userText);
+
+        try {
+            // 1. 组装对话历史（最多 6 轮，保持上下文）
+            const recentHistory = chatHistory.slice(-6);
+            let conversation = '';
+            recentHistory.forEach(msg => {
+                conversation += (msg.role === 'user' ? 'User: ' : 'Akira: ') + msg.content + '\n';
+            });
+            conversation += 'User: ' + userText + '\nAkira:';
+
+            // 2. 组装完整 prompt
+            const systemPrompt = SYSTEM_PROMPTS[currentLang] || SYSTEM_PROMPTS.zh;
+            const fullPrompt = systemPrompt + '\n\n---\n' + conversation;
+
+            // 3. 构造请求 URL
+            const url = AI_ENDPOINT + encodeURIComponent(fullPrompt)
+                      + '?model=' + AI_MODEL
+                      + '&seed=' + Math.floor(Math.random() * 1000000);
+
+            // 4. 带 12 秒超时
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 12000);
+
+            const res = await fetch(url, { signal: controller.signal });
+            clearTimeout(timeoutId);
+
+            if (!res.ok) throw new Error('AI response not ok: ' + res.status);
+
+            let reply = (await res.text()).trim();
+
+            // 5. 清理：去掉可能的 "Akira:" 前缀
+            reply = reply.replace(/^(Akira:|Assistant:)\s*/i, '').trim();
+
+            // 6. 清理可能的引号包裹
+            if (reply.startsWith('"') && reply.endsWith('"')) {
+                reply = reply.slice(1, -1);
+            }
+
+            if (!reply || reply.length < 1) throw new Error('Empty reply');
+
+            // 7. 记录到历史
+            chatHistory.push({ role: 'user', content: userText });
+            chatHistory.push({ role: 'assistant', content: reply });
+
+            return reply;
+        } catch (err) {
+            console.warn('AI 调用失败，降级到本地回复池:', err);
+            return localReply(userText);
+        }
+    }
+
+    async function sendChat() {
+        const text = chatInput.value.trim();
+        if (!text) return;
+
+        addMessage(text, 'user');
+        chatInput.value = '';
+        chatSendBtn.disabled = true;
+
+        showTyping();
+
+        const reply = await akiraReply(text);
+
+        removeTyping();
+        addMessage(reply, 'akira');
+
+        chatSendBtn.disabled = false;
+        chatInput.focus();
+    }
+
+    chatSendBtn.addEventListener('click', sendChat);
+    chatInput.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendChat();
+        }
+    });
+
+    function openChat() {
+        chatWidget.classList.add('open');
+        setTimeout(() => chatInput.focus(), 200);
+    }
+    function closeChatFn() { chatWidget.classList.remove('open'); }
+
+    floatBtn.addEventListener('click', () => {
+        if (chatWidget.classList.contains('open')) closeChatFn();
+        else openChat();
+    });
+    closeChat.addEventListener('click', closeChatFn);
+
+    if (liveChatLink) {
+        liveChatLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelectorAll('.nav-links .dropdown').forEach(d => d.classList.remove('active'));
+            openChat();
+        });
+    }
+
+    if (helpLiveChat) {
+        helpLiveChat.addEventListener('click', (e) => {
+            e.preventDefault();
+            openChat();
+        });
+    }
+
+    document.querySelectorAll('.nav-links button[data-page]').forEach(btn => {
+        btn.addEventListener('click', () => switchPage(btn.dataset.page));
+    });
+
+    document.addEventListener('click', (e) => {
+        const el = e.target.closest('[data-goto]');
+        if (!el) return;
+        e.preventDefault();
+        switchPage(el.dataset.goto);
+        document.querySelectorAll('.nav-links .dropdown').forEach(d => d.classList.remove('active'));
+    });
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            applyLanguage(btn.dataset.lang);
+            showToast(
+                btn.dataset.lang === 'zh' ? '已切换为中文 🇨🇳' :
+                btn.dataset.lang === 'ja' ? '日本語に切り替えました 🇯🇵' :
+                                            'Switched to English 🇬🇧'
+            );
+        });
+    });
+
+    // 🔗 社交链接：Discord 真实跳转，其他显示 Toast
+    document.querySelectorAll('[data-sns]').forEach(el => {
+        el.addEventListener('click', (e) => {
+            const href = el.getAttribute('href');
+            // Discord 有真实链接，让它正常跳转
+            if (el.dataset.sns === 'Discord' && href && href !== '#') {
+                return;
+            }
+            // 其他社交平台暂时显示 Toast
+            e.preventDefault();
+            showToast(t('sns_connect', { sns: el.dataset.sns }));
+        });
+    });
+
+    document.querySelectorAll('.nav-links .dropdown').forEach(dd => {
+        const trigger = dd.querySelector(':scope > span');
+        if (!trigger) return;
+        trigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const wasActive = dd.classList.contains('active');
+            document.querySelectorAll('.nav-links .dropdown').forEach(other => other.classList.remove('active'));
+            if (!wasActive) dd.classList.add('active');
+        });
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.nav-links .dropdown')) {
+            document.querySelectorAll('.nav-links .dropdown').forEach(d => d.classList.remove('active'));
+        }
+    });
+
+    document.querySelectorAll('.dropdown-content a').forEach(a => {
+        a.addEventListener('click', () => {
+            document.querySelectorAll('.nav-links .dropdown').forEach(d => d.classList.remove('active'));
+        });
+    });
+
+    const backToTop = $('backToTop');
+    if (backToTop) {
+        backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Escape') return;
+        if (modal.classList.contains('active')) closeModalFn();
+        if (surveyModal.classList.contains('active')) surveyModal.classList.remove('active');
+        document.querySelectorAll('.nav-links .dropdown').forEach(d => d.classList.remove('active'));
+    });
+
+    function init() {
+        const users = getUsers();
+        if (currentUser && !users[currentUser]) {
+            currentUser = null;
+            try { localStorage.removeItem(CURRENT_USER_KEY); } catch (e) {}
+        }
+
+        applyLanguage(currentLang);
+        updateUIForAuth();
+
+        if (currentUser && surveyName) surveyName.value = currentUser;
+        console.log('%c🍁 AkiraTalk ready', 'color:#D4865C;font-weight:bold;font-size:14px');
+        console.log('%c🌸 AI 已启用 (Pollinations.ai)', 'color:#D4865C;font-size:12px');
+    }
+
+    init();
+})();
+</script>
+</body>
+</html>
