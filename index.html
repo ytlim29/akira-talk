@@ -1342,10 +1342,9 @@
     };
 
     // ============================================================
-    // 🌸 真正的 AI 配置（Pollinations.ai 免费 API，无需 Key）
+    // 🌸 真正的 AI 配置（连接到你自己的 Render 后端 → Gemini）
     // ============================================================
-    const AI_ENDPOINT = 'https://text.pollinations.ai/';
-    const AI_MODEL = 'openai'; // 可选: openai / mistral / llama 等
+    const AI_ENDPOINT = 'https://akiratalk-backend.onrender.com/api/chat';
     const AI_ENABLED = true;   // 想关闭 AI 改成 false 即可
 
     // 系统提示（决定 Akira 的人格）
@@ -1773,43 +1772,42 @@
         try {
             // 1. 组装对话历史（最多 6 轮，保持上下文）
             const recentHistory = chatHistory.slice(-6);
-            let conversation = '';
-            recentHistory.forEach(msg => {
-                conversation += (msg.role === 'user' ? 'User: ' : 'Akira: ') + msg.content + '\n';
-            });
-            conversation += 'User: ' + userText + '\nAkira:';
-
-            // 2. 组装完整 prompt
             const systemPrompt = SYSTEM_PROMPTS[currentLang] || SYSTEM_PROMPTS.zh;
-            const fullPrompt = systemPrompt + '\n\n---\n' + conversation;
 
-            // 3. 构造请求 URL
-            const url = AI_ENDPOINT + encodeURIComponent(fullPrompt)
-                      + '?model=' + AI_MODEL
-                      + '&seed=' + Math.floor(Math.random() * 1000000);
-
-            // 4. 带 12 秒超时
+            // 2. 带 15 秒超时（Render 免费实例可能有冷启动延迟）
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 12000);
+            const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-            const res = await fetch(url, { signal: controller.signal });
+            // 3. 调用你自己的后端（Render → Gemini）
+            const res = await fetch(AI_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                signal: controller.signal,
+                body: JSON.stringify({
+                    message: userText,
+                    history: recentHistory,
+                    systemPrompt: systemPrompt
+                })
+            });
             clearTimeout(timeoutId);
 
             if (!res.ok) throw new Error('AI response not ok: ' + res.status);
 
-            let reply = (await res.text()).trim();
+            const data = await res.json();
+            // 兼容后端可能用的不同字段名
+            let reply = (data.reply || data.response || data.message || data.text || '').toString().trim();
 
-            // 5. 清理：去掉可能的 "Akira:" 前缀
+            // 4. 清理：去掉可能的 "Akira:" 前缀
             reply = reply.replace(/^(Akira:|Assistant:)\s*/i, '').trim();
 
-            // 6. 清理可能的引号包裹
+            // 5. 清理可能的引号包裹
             if (reply.startsWith('"') && reply.endsWith('"')) {
                 reply = reply.slice(1, -1);
             }
 
             if (!reply || reply.length < 1) throw new Error('Empty reply');
 
-            // 7. 记录到历史
+            // 6. 记录到历史
             chatHistory.push({ role: 'user', content: userText });
             chatHistory.push({ role: 'assistant', content: reply });
 
@@ -1963,7 +1961,7 @@
 
         if (currentUser && surveyName) surveyName.value = currentUser;
         console.log('%c🍁 AkiraTalk ready', 'color:#D4865C;font-weight:bold;font-size:14px');
-        console.log('%c🌸 AI 已启用 (Pollinations.ai)', 'color:#D4865C;font-size:12px');
+        console.log('%c🌸 AI 已启用 (Render Backend → Gemini)', 'color:#D4865C;font-size:12px');
     }
 
     init();
